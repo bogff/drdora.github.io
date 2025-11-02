@@ -16,13 +16,15 @@ body {
   align-items: center;
   flex-direction: column;
   background:
-    linear-gradient(135deg, rgba(60, 15, 50, 0.85), rgba(45, 10, 70, 0.95)),
-    url('images/dasha_bg.jpg') no-repeat center center / cover;
+    linear-gradient(135deg, rgba(255,102,204,0.1), rgba(180,50,230,0.1)),
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05), transparent 70%),
+    #0c0c0c; /* тёмный фон всей страницы */
   position: relative;
   color: white;
   overflow: hidden;
-  backdrop-filter: blur(18px) saturate(200%);
-  -webkit-backdrop-filter: blur(18px) saturate(200%);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
 }
 
 /* Заголовок */
@@ -72,14 +74,14 @@ h1 {
   bottom: 60px;
   width: 90%;
   max-width: 900px;
-  height: 100px;
-  border-radius: 30px;
-  backdrop-filter: blur(30px) saturate(220%);
-  -webkit-backdrop-filter: blur(30px) saturate(220%);
-  background: rgba(255, 102, 204, 0.12);
+  height: 90px;
+  border-radius: 20px;
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  background: rgba(255, 102, 204, 0.15);
   box-shadow:
-    0 0 40px rgba(255, 102, 204, 0.6),
-    inset 0 0 25px rgba(255, 182, 193, 0.4);
+    0 0 30px rgba(255, 102, 204, 0.7),
+    inset 0 0 15px rgba(255, 182, 193, 0.5);
   overflow: hidden;
 }
 
@@ -138,20 +140,18 @@ const ctx = canvas.getContext("2d");
 const bgm = document.getElementById("bgm");
 const playButton = document.getElementById("playButton");
 
-// Настраиваем canvas размер под div и DPI
 function resizeCanvas() {
   const style = getComputedStyle(equalizerDiv);
   canvas.width = parseInt(style.width) * window.devicePixelRatio;
   canvas.height = parseInt(style.height) * window.devicePixelRatio;
   canvas.style.width = style.width;
   canvas.style.height = style.height;
-  ctx.setTransform(1, 0, 0, 1, 0, 0); // сброс трансформаций
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 }
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-// Создаем аудио-контекст и анализатор
 let audioCtx, source, analyser, dataArray;
 
 function setupAudio() {
@@ -164,7 +164,6 @@ function setupAudio() {
   dataArray = new Uint8Array(analyser.frequencyBinCount);
 }
 
-// Функция отрисовки плавной волны без точек
 function drawWave() {
   requestAnimationFrame(drawWave);
   analyser.getByteFrequencyData(dataArray);
@@ -178,62 +177,45 @@ function drawWave() {
   const baseY = height * 0.6;
   const waveLength = width / (pointsCount - 1);
 
-  ctx.lineWidth = 7;
+  ctx.lineWidth = 6;
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
 
-  // Градиент линии волны
   const gradientLine = ctx.createLinearGradient(0, 0, width, 0);
   gradientLine.addColorStop(0, "rgba(255, 102, 204, 1)");
   gradientLine.addColorStop(1, "rgba(180, 50, 230, 1)");
 
-  // Градиент заливки под волной
   const gradientFill = ctx.createLinearGradient(0, 0, 0, height);
-  gradientFill.addColorStop(0, "rgba(255, 102, 204, 0.45)");
-  gradientFill.addColorStop(1, "rgba(180, 50, 230, 0.06)");
+  gradientFill.addColorStop(0, "rgba(255, 102, 204, 0.4)");
+  gradientFill.addColorStop(1, "rgba(180, 50, 230, 0.05)");
 
   ctx.strokeStyle = gradientLine;
   ctx.fillStyle = gradientFill;
 
   ctx.beginPath();
 
-  // Рисуем волнообразный путь
   for (let i = 0; i < pointsCount; i++) {
     const x = i * waveLength;
     const amp = dataArray[i] / 255;
-
-    // Сложная синусоида с разной частотой и амплитудой, без точек
     const y =
       baseY -
-      (Math.sin(i * 0.35 + performance.now() / 500) * 25 +
-        Math.sin(i * 0.12 + performance.now() / 350) * 18) *
-        amp -
-      amp * 45;
-
-    if (i === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
+      (Math.sin(i * 0.3 + performance.now() / 400) * 20 +
+       Math.sin(i * 0.1 + performance.now() / 200) * 15) * amp -
+      amp * 40;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
   }
 
-  // Рисуем линию волны
   ctx.stroke();
-
-  // Заполняем область под волной
   ctx.lineTo(width, height);
   ctx.lineTo(0, height);
   ctx.closePath();
   ctx.fill();
 }
 
-// Анимация фото Даши
-function easeOutQuad(t) {
-  return t * (2 - t);
-}
-function easeInQuad(t) {
-  return t * t;
-}
+function easeOutQuad(t) { return t*(2-t); }
+function easeInQuad(t) { return t*t; }
+
 function spawnPhoto() {
   const photo = document.createElement("img");
   photo.src = photos[Math.floor(Math.random() * photos.length)];
@@ -241,54 +223,14 @@ function spawnPhoto() {
   photo.style.left = 50 + Math.random() * (window.innerWidth - 100) + "px";
   document.body.appendChild(photo);
   let start = Date.now();
-  const duration = 3500 + Math.random() * 2000;
+  const duration = 3500 + Math.random()*2000;
   const startY = -250;
-  const endY = window.innerHeight / 2 - 70;
-  const maxScale = 1.5 + Math.random() * 0.5;
+  const endY = window.innerHeight/2 - 70;
+  const maxScale = 1.5 + Math.random()*0.5;
   function animatePhoto() {
     const now = Date.now();
-    const t = (now - start) / duration;
-    if (t < 1) {
-      const y = startY + (endY - startY) * easeOutQuad(t);
-      const scale = 1 + (maxScale - 1) * easeOutQuad(t);
-      const rotate = t * 720;
-      const opacity = Math.sin(t * Math.PI);
-      photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
-      photo.style.opacity = opacity;
-      requestAnimationFrame(animatePhoto);
-    } else {
-      start = Date.now();
-      const currentScale = maxScale;
-      const currentY = endY;
-      function returnAnimate() {
-        const t2 = (Date.now() - start) / duration;
-        if (t2 < 1) {
-          const y = currentY - (currentY - startY) * easeInQuad(t2);
-          const scale = currentScale - (currentScale - 1) * easeInQuad(t2);
-          const rotate = 720 + t2 * 720;
-          const opacity = Math.cos((t2 * Math.PI) / 2);
-          photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
-          photo.style.opacity = opacity;
-          requestAnimationFrame(returnAnimate);
-        } else {
-          photo.remove();
-        }
-      }
-      returnAnimate();
-    }
-  }
-  animatePhoto();
-}
-
-// Запуск музыки, эквалайзера и фото по кнопке
-playButton.addEventListener("click", () => {
-  if (!audioCtx) setupAudio();
-  bgm.play().then(() => {
-    drawWave();
-    setInterval(spawnPhoto, 1500);
-    playButton.style.display = "none";
-  });
-});
-</script>
-</body>
-</html>
+    const t = (now-start)/duration;
+    if(t<1){
+      const y = startY + (endY-startY)*easeOutQuad(t);
+      const scale = 1 + (maxScale-1)*easeOutQuad(t);
+      const rotate = t*720
