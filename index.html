@@ -6,6 +6,7 @@
 <title>С Днём Рождения, Даша 💖</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 body {
   margin: 0;
   height: 100vh;
@@ -15,13 +16,13 @@ body {
   align-items: center;
   flex-direction: column;
   background:
-    linear-gradient(135deg, rgba(255,102,204,0.15), rgba(180,50,230,0.15)),
+    linear-gradient(135deg, rgba(60, 15, 50, 0.85), rgba(45, 10, 70, 0.95)),
     url('images/dasha_bg.jpg') no-repeat center center / cover;
   position: relative;
   color: white;
   overflow: hidden;
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(200%);
+  -webkit-backdrop-filter: blur(18px) saturate(200%);
 }
 
 /* Заголовок */
@@ -71,14 +72,14 @@ h1 {
   bottom: 60px;
   width: 90%;
   max-width: 900px;
-  height: 90px;
-  border-radius: 20px;
-  backdrop-filter: blur(25px) saturate(180%);
-  -webkit-backdrop-filter: blur(25px) saturate(180%);
-  background: rgba(255, 102, 204, 0.15);
+  height: 100px;
+  border-radius: 30px;
+  backdrop-filter: blur(30px) saturate(220%);
+  -webkit-backdrop-filter: blur(30px) saturate(220%);
+  background: rgba(255, 102, 204, 0.12);
   box-shadow:
-    0 0 30px rgba(255, 102, 204, 0.7),
-    inset 0 0 15px rgba(255, 182, 193, 0.5);
+    0 0 40px rgba(255, 102, 204, 0.6),
+    inset 0 0 25px rgba(255, 182, 193, 0.4);
   overflow: hidden;
 }
 
@@ -163,7 +164,7 @@ function setupAudio() {
   dataArray = new Uint8Array(analyser.frequencyBinCount);
 }
 
-// Функция отрисовки плавной волны
+// Функция отрисовки плавной волны без точек
 function drawWave() {
   requestAnimationFrame(drawWave);
   analyser.getByteFrequencyData(dataArray);
@@ -177,7 +178,7 @@ function drawWave() {
   const baseY = height * 0.6;
   const waveLength = width / (pointsCount - 1);
 
-  ctx.lineWidth = 6;
+  ctx.lineWidth = 7;
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
 
@@ -188,25 +189,26 @@ function drawWave() {
 
   // Градиент заливки под волной
   const gradientFill = ctx.createLinearGradient(0, 0, 0, height);
-  gradientFill.addColorStop(0, "rgba(255, 102, 204, 0.4)");
-  gradientFill.addColorStop(1, "rgba(180, 50, 230, 0.05)");
+  gradientFill.addColorStop(0, "rgba(255, 102, 204, 0.45)");
+  gradientFill.addColorStop(1, "rgba(180, 50, 230, 0.06)");
 
   ctx.strokeStyle = gradientLine;
   ctx.fillStyle = gradientFill;
 
   ctx.beginPath();
 
+  // Рисуем волнообразный путь
   for (let i = 0; i < pointsCount; i++) {
     const x = i * waveLength;
     const amp = dataArray[i] / 255;
 
-    // Сложная синусоида с разной частотой и амплитудой
+    // Сложная синусоида с разной частотой и амплитудой, без точек
     const y =
       baseY -
-      (Math.sin(i * 0.3 + performance.now() / 400) * 20 +
-        Math.sin(i * 0.1 + performance.now() / 200) * 15) *
+      (Math.sin(i * 0.35 + performance.now() / 500) * 25 +
+        Math.sin(i * 0.12 + performance.now() / 350) * 18) *
         amp -
-      amp * 40;
+      amp * 45;
 
     if (i === 0) {
       ctx.moveTo(x, y);
