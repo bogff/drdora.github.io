@@ -63,8 +63,8 @@ h1 {
 
 .photo {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 20px;
   object-fit: cover;
   opacity: 0;
@@ -98,7 +98,7 @@ footer a {
 <h1>С Днём Рождения, Даша 🎂💫</h1>
 
 <audio id="bgm" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+  <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg" />
 </audio>
 
 <div id="equalizer"></div>
@@ -110,16 +110,14 @@ footer a {
 
 <script>
 const photos = [
-  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500",
-  "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500",
-  "https://images.unsplash.com/photo-1531256379411-6f66f3b3f113?w=500"
+  "images/dasha1.jpg",
+  "images/dasha2.jpg",
+  "images/dasha3.jpg",
+  "images/dasha4.jpg"
 ];
 
+// Эквалайзер (визуальные полоски, без фото)
 const equalizer = document.getElementById('equalizer');
-const bgm = document.getElementById('bgm');
-
-// Эквалайзер
 const bars = [];
 const numBars = 30;
 for (let i = 0; i < numBars; i++) {
@@ -129,6 +127,22 @@ for (let i = 0; i < numBars; i++) {
   bars.push(bar);
 }
 
+// Функция для создания плавающих фото
+function spawnPhoto() {
+  const photo = document.createElement('img');
+  photo.src = photos[Math.floor(Math.random() * photos.length)];
+  photo.classList.add('photo');
+  photo.style.left = Math.random() * (window.innerWidth - 140) + 'px';
+  photo.style.animationDuration = 8 + Math.random() * 6 + 's';
+  document.body.appendChild(photo);
+
+  setTimeout(() => photo.remove(), 14000);
+}
+
+setInterval(spawnPhoto, 1500);
+
+// Анимация эквалайзера и музыка
+const bgm = document.getElementById('bgm');
 function animate() {
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const source = audioCtx.createMediaElementSource(bgm);
@@ -151,21 +165,7 @@ function animate() {
   renderFrame();
 }
 
-// Плавающие фото
-function spawnPhoto() {
-  const photo = document.createElement('img');
-  photo.src = photos[Math.floor(Math.random() * photos.length)];
-  photo.classList.add('photo');
-  photo.style.left = Math.random() * (window.innerWidth - 120) + 'px';
-  photo.style.animationDuration = 8 + Math.random() * 6 + 's';
-  document.body.appendChild(photo);
-
-  setTimeout(() => photo.remove(), 14000);
-}
-
-setInterval(spawnPhoto, 1500);
-
-// Старт музыки и эквалайзера при клике
+// Запуск музыки и эквалайзера после клика
 function startAudio() {
   bgm.play().then(() => animate())
     .catch(err => console.log('Нужен клик для старта аудио:', err));
