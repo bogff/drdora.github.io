@@ -5,95 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>С Днём Рождения, Даша 💖</title>
 <style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: white;
-    font-family: "Poppins", sans-serif;
-    cursor: pointer;
-    background: linear-gradient(135deg, #1a1a1a, #2b2b4d);
-    background-size: 400% 400%;
-    animation: bgShift 15s ease infinite;
-  }
+body {
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  background: linear-gradient(135deg, #1a1a1a, #2b2b4d);
+  background-size: 400% 400%;
+  animation: bgShift 15s ease infinite;
+}
 
-  @keyframes bgShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-  h1 {
-    position: absolute;
-    top: 10%;
-    text-align: center;
-    font-size: 2.5em;
-    animation: fadeIn 3s ease forwards;
-    opacity: 0;
-    text-shadow: 0 0 15px #ff66cc, 0 0 30px #ff66cc;
-  }
+h1 {
+  position: absolute;
+  top: 10%;
+  text-align: center;
+  font-size: 2.5em;
+  animation: fadeIn 3s ease forwards;
+  opacity: 0;
+  text-shadow: 0 0 15px #ff66cc, 0 0 30px #ff66cc;
+}
 
-  @keyframes fadeIn { to { opacity: 1; } }
+@keyframes fadeIn { to { opacity: 1; } }
 
-  #equalizer {
-    display: flex;
-    position: absolute;
-    bottom: 50px;
-    width: 100%;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0 10px;
-  }
+#equalizer {
+  display: flex;
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 10px;
+}
 
-  .bar {
-    flex: 1;
-    margin: 0 3px;
-    border-radius: 15px;
-    transform-origin: bottom;
-    transition: height 0.1s ease;
-    backdrop-filter: blur(8px) saturate(150%);
-    -webkit-backdrop-filter: blur(8px) saturate(150%);
-    background-color: rgba(255, 255, 255, 0.05);
-    background-size: cover;
-    background-position: center;
-    box-shadow: 0 0 20px rgba(255, 102, 204, 0.6), inset 0 0 10px rgba(255,255,255,0.2);
-  }
+.bar {
+  flex: 1;
+  margin: 0 3px;
+  border-radius: 15px;
+  transform-origin: bottom;
+  transition: height 0.1s ease;
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 20px rgba(255, 102, 204, 0.6), inset 0 0 10px rgba(255,255,255,0.2);
+}
 
-  .photo {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    border-radius: 20px;
-    object-fit: cover;
-    opacity: 0;
-    animation: floatUp 10s linear infinite;
-    box-shadow: 0 0 20px rgba(255,102,204,0.5);
-  }
+.photo {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  object-fit: cover;
+  opacity: 0;
+  animation: floatUp 10s linear infinite;
+  box-shadow: 0 0 20px rgba(255,102,204,0.5);
+}
 
-  @keyframes floatUp {
-    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { transform: translateY(-150px) rotate(360deg); opacity: 0; }
-  }
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-150px) rotate(360deg); opacity: 0; }
+}
 
-  footer {
-    position: absolute;
-    bottom: 20px;
-    text-align: center;
-    font-size: 14px;
-    color: #aaa;
-  }
+footer {
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #aaa;
+}
 
-  footer a {
-    color: #ff66cc;
-    text-decoration: none;
-    margin: 0 6px;
-  }
+footer a {
+  color: #ff66cc;
+  text-decoration: none;
+  margin: 0 6px;
+}
 </style>
 </head>
 <body>
@@ -112,16 +110,16 @@
 
 <script>
 const photos = [
-  "https://i.pinimg.com/originals/3c/4d/0e/3c4d0e3f1d3d4f5b91f1e9f5f6f7a8b9.jpg",
-  "https://i.pinimg.com/originals/0a/b1/c2/0ab1c2d3e4f5a6b7c8d9e0f1a2b3c4d5.jpg",
-  "https://i.pinimg.com/originals/1b/2c/3d/1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e.jpg",
-  "https://i.pinimg.com/originals/4d/5e/6f/4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a.jpg"
+  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500",
+  "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500",
+  "https://images.unsplash.com/photo-1531256379411-6f66f3b3f113?w=500"
 ];
 
 const equalizer = document.getElementById('equalizer');
 const bgm = document.getElementById('bgm');
 
-// Создаем эквалайзер
+// Эквалайзер
 const bars = [];
 const numBars = 30;
 for (let i = 0; i < numBars; i++) {
@@ -131,7 +129,6 @@ for (let i = 0; i < numBars; i++) {
   bars.push(bar);
 }
 
-// Анимация эквалайзера
 function animate() {
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const source = audioCtx.createMediaElementSource(bgm);
@@ -159,17 +156,16 @@ function spawnPhoto() {
   const photo = document.createElement('img');
   photo.src = photos[Math.floor(Math.random() * photos.length)];
   photo.classList.add('photo');
-  photo.style.left = Math.random() * window.innerWidth + 'px';
+  photo.style.left = Math.random() * (window.innerWidth - 120) + 'px';
   photo.style.animationDuration = 8 + Math.random() * 6 + 's';
   document.body.appendChild(photo);
 
   setTimeout(() => photo.remove(), 14000);
 }
 
-// Запуск появления фотографий каждые 1.5 секунды
 setInterval(spawnPhoto, 1500);
 
-// Запуск музыки и эквалайзера при клике
+// Старт музыки и эквалайзера при клике
 function startAudio() {
   bgm.play().then(() => animate())
     .catch(err => console.log('Нужен клик для старта аудио:', err));
