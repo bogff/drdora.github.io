@@ -72,14 +72,12 @@ h1 {
 
 .bar {
   flex: 1;
-  margin: 0 5px;
-  border-radius: 25px;
+  margin: 0 3px;
+  border-radius: 50px;
   height: 50px;
-  background: rgba(255,182,193,0.15);
-  backdrop-filter: blur(15px) saturate(180%);
-  -webkit-backdrop-filter: blur(15px) saturate(180%);
-  box-shadow: 0 0 10px rgba(255,105,180,0.7), inset 0 0 5px rgba(255,255,255,0.3);
-  transition: height 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+  background: linear-gradient(to top, rgba(255,182,193,0.8), rgba(255,105,180,0.4));
+  box-shadow: 0 0 15px rgba(255,105,180,0.7), inset 0 0 5px rgba(255,255,255,0.3);
+  transition: height 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 /* Фото Даши */
@@ -91,7 +89,7 @@ h1 {
   object-fit: cover;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 20px rgba(255,102,204,0.8), 0 0 40px rgba(255,102,255,0.5);
+  box-shadow: 0 0 25px rgba(255,102,204,0.8), 0 0 50px rgba(255,102,255,0.5);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -155,7 +153,7 @@ function animateEqualizer() {
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const source = audioCtx.createMediaElementSource(bgm);
   const analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 64;
+  analyser.fftSize = 128;
   source.connect(analyser);
   analyser.connect(audioCtx.destination);
 
@@ -166,12 +164,15 @@ function animateEqualizer() {
     analyser.getByteFrequencyData(dataArray);
     for (let i = 0; i < bars.length; i++) {
       const value = dataArray[i % dataArray.length];
-      bars[i].style.height = (50 + value * 2) + 'px';
+      const newHeight = 40 + value * 1.8;
+      bars[i].style.height = `${newHeight}px`;
+
       const r = 255;
-      const g = 105 + Math.floor(value/2);
+      const g = 105 + Math.floor(value/3);
       const b = 180 + Math.floor(value/4);
-      bars[i].style.background = `rgba(${r},${g},${b},0.25)`;
-      bars[i].style.boxShadow = `0 0 ${5 + value/10}px rgba(${r},${g},${b},0.8), inset 0 0 ${2 + value/20}px rgba(255,255,255,0.3)`;
+
+      bars[i].style.background = `linear-gradient(to top, rgba(${r},${g},${b},0.8), rgba(${r},${g},${b},0.3))`;
+      bars[i].style.boxShadow = `0 0 ${5 + value/5}px rgba(${r},${g},${b},0.8), inset 0 0 ${2 + value/15}px rgba(255,255,255,0.3)`;
     }
   }
   renderFrame();
