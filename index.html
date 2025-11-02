@@ -58,32 +58,23 @@
     box-shadow: 0 0 40px rgba(255,102,204,0.9);
   }
 
-  /* Эквалайзер - волны */
+  /* Новый стильный эквалайзер - светящиеся волнистые линии */
   #waveEqualizer {
     position: absolute;
     bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
-    max-width: 800px;
-    height: 120px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    pointer-events: none;
+    width: 90%;
+    max-width: 900px;
+    height: 140px;
+    overflow: visible;
   }
 
-  .wave {
-    flex: 1;
-    margin: 0 6px;
-    height: 50px;
-    border-radius: 60% / 100%;
-    background: linear-gradient(135deg, rgba(255,182,193,0.4), rgba(255,105,180,0.9));
-    box-shadow:
-      0 0 15px rgba(255,105,180,0.7),
-      inset 0 0 15px rgba(255,182,193,0.5);
-    transition: height 0.1s ease, opacity 0.1s ease;
-    filter: drop-shadow(0 0 10px rgba(255,105,180,0.5));
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 0 10px #ff66cc);
   }
 
   /* Фото Даши */
@@ -122,6 +113,10 @@
   <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg" />
 </audio>
 
+<div id="waveEqualizer">
+  <canvas id="canvas"></canvas>
+</div>
+
 <footer>
   designed by <b>prostozhenyaaa</b><br />
   <a href="#">Instagram</a> | <a href="#">VK</a> | <a href="#">Telegram</a>
@@ -137,52 +132,76 @@
 
   const bgm = document.getElementById('bgm');
   const playButton = document.getElementById('playButton');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
 
-  // Создаем контейнер для волн эквалайзера
-  const waveEqualizer = document.createElement('div');
-  waveEqualizer.id = 'waveEqualizer';
-  document.body.appendChild(waveEqualizer);
-
-  const waveCount = 20;
-  const waves = [];
-
-  for(let i = 0; i < waveCount; i++){
-    const wave = document.createElement('div');
-    wave.classList.add('wave');
-    waveEqualizer.appendChild(wave);
-    waves.push(wave);
+  // Настраиваем размеры canvas под контейнер
+  function resizeCanvas() {
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
 
-  function animateWaveEqualizer(){
-    // Инициализация аудио контекста и анализатора
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = audioCtx.createMediaElementSource(bgm);
-    const analyser = audioCtx.createAnalyser();
+  // Параметры волн
+  const waveCount = 5;
+  const waveColors = [
+    'rgba(255,102,204,0.7)',
+    'rgba(255,66,185,0.5)',
+    'rgba(255,182,193,0.4)',
+    'rgba(255,105,180,0.3)',
+    'rgba(255,20,147,0.2)'
+  ];
+
+  // Параметры анимации
+  let audioCtx, analyser, dataArray, source;
+
+  function setupAudio() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    source = audioCtx.createMediaElementSource(bgm);
+    analyser = audioCtx.createAnalyser();
     analyser.fftSize = 256;
     source.connect(analyser);
     analyser.connect(audioCtx.destination);
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    function render(){
-      requestAnimationFrame(render);
-      analyser.getByteFrequencyData(dataArray);
-
-      waves.forEach((wave, i) => {
-        const value = dataArray[i % dataArray.length];
-        // Высота волны 40 - 140px (зависит от громкости)
-        const height = 40 + (value / 255) * 100;
-        wave.style.height = height + 'px';
-        // Прозрачность зависит от громкости
-        wave.style.opacity = 0.3 + (value / 255) * 0.7;
-        // Сдвиг цвета для динамики
-        const hueShift = (value / 255) * 50;
-        wave.style.filter = `drop-shadow(0 0 10px hsl(${320 + hueShift}, 80%, 70%))`;
-      });
-    }
-    render();
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
   }
 
-  // Функции для анимации фото Даши (без изменений)
+  function drawWave(amplitude, offset, color, frequency) {
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    const yCenter = height / 2 + offset;
+
+    for (let x = 0; x < width; x++) {
+      const y = yCenter + amplitude * Math.sin((x / width) * frequency * 2 * Math.PI + offset * 5);
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    analyser.getByteFrequencyData(dataArray);
+
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+    for (let i = 0; i < waveCount; i++) {
+      // Используем разные диапазоны спектра для волн
+      const audioValue = dataArray[Math.floor((i / waveCount) * dataArray.length)];
+      const amplitude = (audioValue / 255) * 40 + 10; // Высота волны
+      const offset = i * 15;
+      const frequency = 2 + i * 0.5;
+
+      drawWave(amplitude, offset, waveColors[i], frequency);
+    }
+  }
+
+  // Функции для анимации фото Даши (как было)
   function easeOutQuad(t){return t*(2-t);}
   function easeInQuad(t){return t*t;}
   function spawnPhoto() {
@@ -231,14 +250,15 @@
     animatePhoto();
   }
 
-  // Запуск музыки, волнового эквалайзера и фото
   playButton.addEventListener('click', () => {
+    if (!audioCtx) setupAudio();
     bgm.play().then(() => {
-      animateWaveEqualizer();
+      animate();
       setInterval(spawnPhoto, 1500);
       playButton.style.display = 'none';
     });
   });
 </script>
+
 </body>
 </html>
