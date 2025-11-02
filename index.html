@@ -73,11 +73,11 @@ h1 {
   margin: 0 5px;
   border-radius: 25px;
   height: 50px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(14px) saturate(220%);
-  -webkit-backdrop-filter: blur(14px) saturate(220%);
-  box-shadow: 0 0 15px rgba(255,102,204,0.6), inset 0 0 10px rgba(255,255,255,0.2);
-  transition: height 0.1s ease, box-shadow 0.1s ease;
+  background: rgba(255,182,193,0.15);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  box-shadow: 0 0 10px rgba(255,105,180,0.7), inset 0 0 5px rgba(255,255,255,0.3);
+  transition: height 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
 }
 
 /* Фото Даши */
@@ -165,7 +165,11 @@ function animateEqualizer() {
     for (let i = 0; i < bars.length; i++) {
       const value = dataArray[i % dataArray.length];
       bars[i].style.height = (50 + value * 2) + 'px';
-      bars[i].style.boxShadow = `0 0 ${10 + value/10}px rgba(255,102,204,0.7), inset 0 0 ${5 + value/20}px rgba(255,255,255,0.3)`;
+      const r = 255;
+      const g = 105 + Math.floor(value/2);
+      const b = 180 + Math.floor(value/4);
+      bars[i].style.background = `rgba(${r},${g},${b},0.25)`;
+      bars[i].style.boxShadow = `0 0 ${5 + value/10}px rgba(${r},${g},${b},0.8), inset 0 0 ${2 + value/20}px rgba(255,255,255,0.3)`;
     }
   }
   renderFrame();
@@ -221,7 +225,14 @@ function spawnPhoto() {
   animatePhoto();
 }
 
-// Запуск музыки и эффектов
-function startAudio() {
+// Запуск музыки, эквалайзера и фото
+playButton.addEventListener('click', () => {
   bgm.play().then(()=>{
-    animateEqualizer
+    animateEqualizer();
+    setInterval(spawnPhoto, 1500);
+    playButton.style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>
