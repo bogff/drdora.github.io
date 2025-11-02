@@ -80,9 +80,21 @@
 <body>
   <h1>С Днём Рождения, Даша 🎂💫</h1>
 
-  <audio id="bgm" autoplay loop>
-    <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg" />
-  </audio>
+  
+  <button id="playMusic">🎵 Включить музыку</button>
+<audio id="bgm" loop>
+  <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg" />
+</audio>
+
+<script>
+  const btn = document.getElementById('playMusic');
+  const bgm = document.getElementById('bgm');
+  btn.addEventListener('click', () => {
+    bgm.play();
+    btn.style.display = 'none'; // спрятать кнопку после запуска
+  });
+</script>
+
 
   <footer>
     designed by <b>prostozhenyaaa</b><br />
@@ -116,6 +128,7 @@
   </script>
 </body>
 </html>
+
 
 
 
