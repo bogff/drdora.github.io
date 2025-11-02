@@ -60,24 +60,23 @@ h1 {
   box-shadow: 0 0 40px rgba(255,102,204,0.9);
 }
 
-/* Эквалайзер */
+/* Эквалайзер в виде пульсирующих кругов */
 #equalizer {
-  display: flex;
   position: absolute;
-  bottom: 60px;
-  width: 90%;
-  justify-content: space-around;
-  align-items: flex-end;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
-.bar {
-  flex: 1;
-  margin: 0 3px;
-  border-radius: 50px;
-  height: 50px;
-  background: linear-gradient(to top, rgba(255,182,193,0.8), rgba(255,105,180,0.4));
-  box-shadow: 0 0 15px rgba(255,105,180,0.7), inset 0 0 5px rgba(255,255,255,0.3);
-  transition: height 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, rgba(255,182,193,1) 0%, rgba(255,105,180,0.3) 70%);
+  box-shadow: 0 0 20px rgba(255,105,180,0.7);
+  transition: transform 0.1s linear, opacity 0.1s linear;
 }
 
 /* Фото Даши */
@@ -138,108 +137,14 @@ const equalizer = document.getElementById('equalizer');
 const bgm = document.getElementById('bgm');
 const playButton = document.getElementById('playButton');
 
-// Создание полосок эквалайзера
-const bars = [];
-const numBars = 25;
-for (let i = 0; i < numBars; i++) {
-  const bar = document.createElement('div');
-  bar.classList.add('bar');
-  equalizer.appendChild(bar);
-  bars.push(bar);
+// Создаем круги эквалайзера
+const circles = [];
+const numCircles = 40;
+for (let i = 0; i < numCircles; i++) {
+  const circle = document.createElement('div');
+  circle.classList.add('circle');
+  equalizer.appendChild(circle);
+  circles.push(circle);
 }
 
-// Анимация эквалайзера
-function animateEqualizer() {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const source = audioCtx.createMediaElementSource(bgm);
-  const analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 128;
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
-
-  const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-  function renderFrame() {
-    requestAnimationFrame(renderFrame);
-    analyser.getByteFrequencyData(dataArray);
-    for (let i = 0; i < bars.length; i++) {
-      const value = dataArray[i % dataArray.length];
-      const newHeight = 40 + value * 1.8;
-      bars[i].style.height = `${newHeight}px`;
-
-      const r = 255;
-      const g = 105 + Math.floor(value/3);
-      const b = 180 + Math.floor(value/4);
-
-      bars[i].style.background = `linear-gradient(to top, rgba(${r},${g},${b},0.8), rgba(${r},${g},${b},0.3))`;
-      bars[i].style.boxShadow = `0 0 ${5 + value/5}px rgba(${r},${g},${b},0.8), inset 0 0 ${2 + value/15}px rgba(255,255,255,0.3)`;
-    }
-  }
-  renderFrame();
-}
-
-// Анимация фото Даши
-function easeOutQuad(t){return t*(2-t);}
-function easeInQuad(t){return t*t;}
-
-function spawnPhoto() {
-  const photo = document.createElement('img');
-  photo.src = photos[Math.floor(Math.random() * photos.length)];
-  photo.classList.add('photo');
-  photo.style.left = (50 + Math.random() * (window.innerWidth - 100)) + 'px';
-  document.body.appendChild(photo);
-
-  let start = Date.now();
-  const duration = 3500 + Math.random()*2000;
-  const startY = -250;
-  const endY = window.innerHeight/2 - 70;
-  const maxScale = 1.5 + Math.random()*0.5;
-
-  function animatePhoto() {
-    const now = Date.now();
-    const t = (now - start)/duration;
-    if (t < 1){
-      const y = startY + (endY - startY) * easeOutQuad(t);
-      const scale = 1 + (maxScale-1) * easeOutQuad(t);
-      const rotate = t*720;
-      const opacity = Math.sin(t*Math.PI);
-      photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
-      photo.style.opacity = opacity;
-      requestAnimationFrame(animatePhoto);
-    } else {
-      start = Date.now();
-      const currentScale = maxScale;
-      const currentY = endY;
-      function returnAnimate(){
-        const t2 = (Date.now()-start)/duration;
-        if (t2<1){
-          const y = currentY - (currentY-startY) * easeInQuad(t2);
-          const scale = currentScale - (currentScale-1)*easeInQuad(t2);
-          const rotate = 720 + t2*720;
-          const opacity = Math.cos(t2*Math.PI/2);
-          photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
-          photo.style.opacity = opacity;
-          requestAnimationFrame(returnAnimate);
-        } else { photo.remove(); }
-      }
-      returnAnimate();
-    }
-  }
-  animatePhoto();
-}
-
-// Запуск музыки, эквалайзера и фото
-let audioStarted = false;
-playButton.addEventListener('click', () => {
-  bgm.play().then(()=>{
-    if(!audioStarted){
-      animateEqualizer();
-      setInterval(spawnPhoto, 1500);
-      audioStarted = true;
-    }
-    playButton.style.display = 'none';
-  }).catch(err => console.log(err));
-});
-</script>
-</body>
-</html>
+// Аним
