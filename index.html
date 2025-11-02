@@ -34,20 +34,22 @@
 
     /* Эквалайзер полоски с эффектом стекла */
     .bar {
-      display: inline-block;
-      width: 70px;
-      height: 150px;
-      margin: 0 8px;
-      border-radius: 15px;
-      background-size: cover;
-      background-position: center;
-      transform-origin: bottom;
-      transition: height 0.1s ease;
-      backdrop-filter: blur(8px) saturate(150%);
-      -webkit-backdrop-filter: blur(8px) saturate(150%);
-      background-color: rgba(255, 255, 255, 0.05);
-      box-shadow: 0 0 20px rgba(255, 102, 204, 0.6), inset 0 0 10px rgba(255,255,255,0.2);
-    }
+  display: inline-block;
+  width: 100px;           /* увеличиваем ширину */
+  height: 150px;          /* начальная высота */
+  margin: 0 8px;
+  border-radius: 15px;
+  transform-origin: bottom;
+  transition: height 0.1s ease;
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  background-color: rgba(255, 255, 255, 0.05);
+  background-size: contain;     /* показываем фото полностью */
+  background-repeat: no-repeat;
+  background-position: center;
+  box-shadow: 0 0 20px rgba(255, 102, 204, 0.6), inset 0 0 10px rgba(255,255,255,0.2);
+}
+
 
     #equalizer {
       display: flex;
@@ -148,3 +150,4 @@
   </script>
 </body>
 </html>
+
