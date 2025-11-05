@@ -86,21 +86,16 @@ h1 {
   transform: translateX(-50%);
   width: 250px;
   opacity: 0.9;
-  animation: float 5s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
-  z-index: 0;
+  animation: float 5s ease-in-out infinite;
+  z-index: 1;
 }
 
 @keyframes float {
-  0%, 100% { transform: translate(-50%, -5px) rotate(-1deg); }
-  50% { transform: translate(-50%, 5px) rotate(1deg); }
+  0%, 100% { transform: translate(-50%, -5px) rotate(-2deg); }
+  50% { transform: translate(-50%, 5px) rotate(2deg); }
 }
 
-@keyframes glow {
-  0% { filter: drop-shadow(0 0 5px #ff66cc); }
-  100% { filter: drop-shadow(0 0 20px #ff99ff); }
-}
-
-/* Печенья */
+/* Печенька */
 .cookie {
   position: absolute;
   width: 70px;
@@ -155,6 +150,11 @@ footer a {
 
 <!-- Флаг -->
 <img id="flag" src="images/flag.png" alt="Флаг">
+
+<!-- Печенька -->
+<img class="cookie" src="images/cookie1.png" style="left:10%; animation-duration:9s; animation-delay:0s;">
+<img class="cookie" src="images/cookie1.png" style="left:40%; animation-duration:11s; animation-delay:2s;">
+<img class="cookie" src="images/cookie1.png" style="left:70%; animation-duration:8s; animation-delay:1s;">
 
 <!-- Музыка -->
 <button id="playButton">Нажми 🎵</button>
@@ -257,4 +257,41 @@ function drawWave() {
 // --- Анимация фото ---
 function spawnPhoto(){
   const photo = document.createElement("img");
-  photo.src = photos[Math.floor(Math.random
+  photo.src = photos[Math.floor(Math.random()*photos.length)];
+  photo.classList.add("photo");
+  photo.style.left = 50 + Math.random()*(window.innerWidth-100)+"px";
+  document.body.appendChild(photo);
+
+  const startTime = Date.now();
+  const duration = 3500 + Math.random()*1500;
+
+  function animate(){
+    const t = (Date.now() - startTime)/duration;
+    if(t<1){
+      const y = -150 + (window.innerHeight+200)*Math.sin(t*Math.PI/2);
+      const scale = 0.8 + 0.5 * Math.sin(t*Math.PI);
+      const rotate = t*360;
+      const opacity = Math.sin(t*Math.PI);
+      photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
+      photo.style.opacity = opacity;
+      requestAnimationFrame(animate);
+    } else {
+      photo.remove();
+    }
+  }
+  animate();
+}
+
+// --- Кнопка ---
+playButton.addEventListener("click", ()=>{
+  if(!audioCtx) setupAudio();
+  bgm.play().then(()=>{
+    drawWave();
+    setInterval(spawnPhoto, 1500);
+    playButton.style.display = "none";
+  });
+});
+</script>
+
+</body>
+</html>
