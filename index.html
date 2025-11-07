@@ -15,7 +15,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: #111; /* тёмный фон */
+  background: #111;
   position: relative;
   color: white;
   overflow: hidden;
@@ -34,6 +34,36 @@ h1 {
 }
 
 @keyframes fadeIn { to { opacity: 1; } }
+
+/* === ФЛАГ === */
+.flag {
+  position: absolute;
+  top: 22%;
+  right: 10%;
+  width: 220px;
+  filter: drop-shadow(0 0 15px rgba(255,102,204,0.7))
+          drop-shadow(0 0 30px rgba(255,182,193,0.4));
+  opacity: 0;
+  animation: flagAppear 2s ease forwards 2s, flagFloat 6s ease-in-out infinite 4s;
+}
+
+/* появление */
+@keyframes flagAppear {
+  from {
+    transform: translateY(-30px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* лёгкое покачивание */
+@keyframes flagFloat {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
 
 /* Кнопка запуска музыки */
 #playButton {
@@ -112,6 +142,9 @@ footer a {
 <body>
 
 <h1>С Днём Рождения, Даша 🎂💫</h1>
+
+<!-- Флаг -->
+<img src="images/flag.png" alt="флаг Даши" class="flag" />
 
 <button id="playButton">Нажми 🎵</button>
 <audio id="bgm" loop>
@@ -250,6 +283,3 @@ playButton.addEventListener("click", ()=>{
 
 </body>
 </html>
-
-
-
