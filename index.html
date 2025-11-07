@@ -255,4 +255,118 @@ function setupAudio() {
   analyser.fftSize = 128;
   source.connect(analyser);
   analyser.connect(audioCtx.destination);
-  dataArray = new Uint8A
+  dataArray = new Uint8Array(analyser.frequencyBinCount);
+}
+
+// Эквалайзер
+function drawModernWave(){
+  requestAnimationFrame(drawModernWave);
+  if(!analyser) return;
+  analyser.getByteFrequencyData(dataArray);
+  const width = canvas.width / window.devicePixelRatio;
+  const height = canvas.height / window.devicePixelRatio;
+  ctx.clearRect(0,0,width,height);
+
+  const points = dataArray.length;
+  const waveLength = width / (points-1);
+  const baseY = height*0.55;
+
+  const gradientLine = ctx.createLinearGradient(0,0,width,0);
+  gradientLine.addColorStop(0,"rgba(180,155,250,0.9)");
+  gradientLine.addColorStop(0.5,"rgba(120,90,220,0.8)");
+  gradientLine.addColorStop(1,"rgba(200,160,255,0.9)");
+
+  const gradientFill = ctx.createLinearGradient(0,0,0,height);
+  gradientFill.addColorStop(0,"rgba(180,155,250,0.25)");
+  gradientFill.addColorStop(1,"rgba(120,90,220,0.05)");
+
+  ctx.lineWidth = 6;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.strokeStyle = gradientLine;
+  ctx.fillStyle = gradientFill;
+  ctx.beginPath();
+
+  for(let i=0;i<points;i++){
+    const x = i*waveLength;
+    const amp = dataArray[i]/255;
+    const y = baseY 
+      - Math.sin(i*0.3 + performance.now()/500)*25*amp 
+      - Math.sin(i*0.1 + performance.now()/300)*18*amp 
+      - amp*30;
+
+    if(i===0) ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  }
+
+  ctx.lineTo(width,height);
+  ctx.lineTo(0,height);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+}
+
+// Фото
+function spawnPhoto(){
+  const photo = document.createElement("img");
+  photo.src = photos[Math.floor(Math.random()*photos.length)];
+  photo.classList.add("photo");
+  photo.style.left = 50 + Math.random()*(window.innerWidth-100)+"px";
+  document.body.appendChild(photo);
+
+  const startTime = Date.now();
+  const duration = 3500 + Math.random()*1500;
+
+  function animate(){
+    const t = (Date.now() - startTime)/duration;
+    if(t<1){
+      const y = -150 + (window.innerHeight+200)*Math.sin(t*Math.PI/2);
+      const scale = 0.8 + 0.5 * Math.sin(t*Math.PI);
+      const rotate = t*360;
+      const opacity = Math.sin(t*Math.PI);
+      photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
+      photo.style.opacity = opacity;
+      requestAnimationFrame(animate);
+    } else {
+      photo.remove();
+    }
+  }
+  animate();
+}
+
+// Снег
+function createSnowflake(){
+  const flake = document.createElement("div");
+  flake.className = "snowflake";
+  flake.style.left = Math.random()*100 + "vw";
+  flake.style.fontSize = (8+Math.random()*12)+"px";
+  flake.style.animationDuration = (5+Math.random()*5)+"s";
+  flake.textContent = "❄";
+  document.body.appendChild(flake);
+  setTimeout(()=>flake.remove(), 10000);
+}
+setInterval(createSnowflake, 300);
+
+// Кнопка запуска
+playButton.addEventListener("click", ()=>{
+  flag.style.animation = "none";
+  cookie.style.animation = "none";
+  void flag.offsetHeight;
+  void cookie.offsetHeight;
+
+  // Плавно исчезают одновременно
+  flag.classList.add("hide");
+  cookie.classList.add("hide");
+
+  setTimeout(()=>{
+    if(!audioCtx) setupAudio();
+    bgm.play().then(()=>{
+      drawModernWave();
+      setInterval(spawnPhoto, 1300);
+      playButton.style.display = "none";
+    });
+  }, 800);
+});
+</script>
+</body>
+</html>
