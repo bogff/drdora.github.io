@@ -1,381 +1,451 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>С Днём Рождения, Даша 💖</title>
 <style>
+/* Шрифты/баз */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-body {
-  margin: 0;
-  height: 100vh;
-  font-family: 'Poppins', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background: linear-gradient(135deg,#1a0f2c,#2c1f4d);
-  position: relative;
-  color: white;
-  overflow: hidden;
+:root{
+  --bg1:#1a0f2c; --bg2:#2c1f4d;
+  --accent1: rgba(180,155,250,0.95);
+  --accent2: rgba(120,90,220,0.85);
+  --glass: rgba(255,255,255,0.06);
+}
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; padding:0; font-family:'Poppins',sans-serif; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:#fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+body{
+  /* учёт вырезов: */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  overflow:hidden;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
 }
 
-/* Заголовок */
+/* контейнер: чтобы центрировать контент и контролировать отступы */
+.app {
+  position:relative;
+  width:100%;
+  max-width:1200px;
+  height:100vh;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* Заголовок — обязательно сверху, фиксированно */
 h1 {
-  font-size: clamp(1.8em, 4vw, 3em);
-  text-align: center;
-  color: #cda4ff;
-  text-shadow: 0 0 10px #b080ff, 0 0 30px #a060ff;
-  opacity: 0;
-  animation: fadeIn 2.4s forwards;
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  z-index: 20;
+  position:absolute;
+  top: calc(8px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  z-index:40;
+  margin:0;
+  padding:6px 12px;
+  font-weight:600;
+  font-size: clamp(1.4rem, 3.6vw, 2.6rem);
+  color:#cda4ff;
+  text-shadow:0 0 10px #b080ff, 0 0 30px #a060ff;
+  pointer-events:none;
+  white-space:nowrap;
 }
 
-@keyframes fadeIn { to { opacity: 1; } }
-
-/* === ФЛАГ === */
-.flag {
-  position: absolute;
-  top: 22%;
-  right: 10%;
-  width: 220px;
-  opacity: 1;
-  filter: drop-shadow(0 0 15px rgba(120,90,220,0.7))
-          drop-shadow(0 0 30px rgba(180,155,250,0.4));
-  transform-origin: left center;
-  animation: flagAppear 1.5s ease forwards 1s, flagWave 5s ease-in-out infinite 2.5s;
-  transition: opacity 1s ease, transform 1s ease !important;
+/* основной центр — кнопка и интерактив */
+.center {
+  width:100%;
+  padding: 12vh 20px 12vh 20px; /* даём места сверху/снизу на мобильных */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events: none; /* элементы внутри могут иметь pointer-events восстанавливаться */
 }
 
-@keyframes flagAppear {
-  from { transform: translateY(-30px) scale(0.9); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-@keyframes flagWave {
-  0% { transform: rotateZ(-2deg) skewY(0deg); }
-  25% { transform: rotateZ(2deg) skewY(2deg); }
-  50% { transform: rotateZ(-1deg) skewY(-2deg); }
-  75% { transform: rotateZ(1deg) skewY(1deg); }
-  100% { transform: rotateZ(-2deg) skewY(0deg); }
-}
-
-.flag.hide {
-  opacity: 0;
-  transform: translateY(-80px) rotate(-10deg) scale(0.8);
-  pointer-events: none;
-}
-
-/* === ПЕЧЕНЬКА === */
-.cookie {
-  position: absolute;
-  bottom: 18%;
-  left: 10%;
-  width: 120px;
-  opacity: 1;
-  transform: scale(1);
-  filter: drop-shadow(0 0 15px rgba(180,155,250,0.6))
-          drop-shadow(0 0 30px rgba(120,90,220,0.3));
-  animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
-  transition: opacity 1s ease, transform 1s ease !important;
-}
-
-@keyframes cookieAppear {
-  from { transform: translateY(30px) scale(0.8); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-@keyframes cookieFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-  25% { transform: translateY(-10px) rotate(-6deg) scale(1.05); }
-  50% { transform: translateY(0) rotate(4deg) scale(1); }
-  75% { transform: translateY(8px) rotate(-4deg) scale(1.03); }
-}
-
-.cookie.hide {
-  opacity: 0;
-  transform: translateY(80px) rotate(10deg) scale(0.8);
-  pointer-events: none;
-}
-
-/* Кнопка запуска музыки */
+/* Плей кнопка — визуально центр, но pointer-events включены */
 #playButton {
-  padding: 15px 40px;
-  font-size: 1.3em;
+  pointer-events: auto;
+  z-index: 30;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding: clamp(10px, 3.2vw, 16px) clamp(20px, 6vw, 40px);
+  font-size: clamp(1rem, 3.2vw, 1.25rem);
+  border-radius: 28px;
   border: none;
-  border-radius: 25px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px) saturate(180%);
+  background: var(--glass);
   color: #fff;
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 0 26px rgba(120,90,220,0.55);
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(120,90,220,0.6);
-  transition: 0.3s;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 15;
+  transition: transform .16s ease, opacity .35s ease;
+}
+#playButton:active{ transform: scale(.98); }
+#playButton.hidden{ opacity:0; transform:scale(.92); pointer-events:none; }
+
+/* Флаг и печенька — плавные гибкие размеры */
+.flag, .cookie {
+  position:absolute;
+  z-index:20;
+  filter: drop-shadow(0 0 12px rgba(120,90,220,0.7)) drop-shadow(0 0 26px rgba(180,155,250,0.35));
+  transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .9s ease;
+  pointer-events:none;
+  will-change:transform,opacity;
 }
 
-#playButton:hover {
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 0 40px rgba(180,155,250,0.9);
+/* флаг справа сверху */
+.flag {
+  top: 18%;
+  right: clamp(12px, 6vw, 6%);
+  width: clamp(120px, 22vw, 220px);
+  transform-origin: left center;
+  animation: flagAppear .9s ease forwards .6s, flagWave 5s ease-in-out infinite 2s;
+}
+@keyframes flagAppear{ from{ transform: translateY(-18px) scale(.96); opacity:0 } to{ transform: translateY(0) scale(1); opacity:1 } }
+@keyframes flagWave{
+  0%{ transform: rotateZ(-2deg) skewY(0deg) } 25%{ transform: rotateZ(2deg) skewY(2deg) } 50%{ transform: rotateZ(-1deg) skewY(-2deg) } 75%{ transform: rotateZ(1deg) skewY(1deg) } 100%{ transform: rotateZ(-2deg) skewY(0deg) }
+}
+
+/* печенька слева снизу */
+.cookie {
+  left: clamp(8px, 6vw, 6%);
+  bottom: clamp(8px, 10vh, 18%);
+  width: clamp(70px, 18vw, 120px);
+  animation: cookieAppear .9s ease forwards 1.1s, cookieFloat 6s ease-in-out infinite 3s;
+}
+@keyframes cookieAppear{ from{ transform: translateY(10px) scale(.94); opacity:0 } to{ transform: translateY(0) scale(1); opacity:1 } }
+@keyframes cookieFloat{
+  0%,100%{ transform: translateY(0) rotate(0deg) scale(1) } 25%{ transform: translateY(-8px) rotate(-6deg) scale(1.03) } 50%{ transform: translateY(0) rotate(4deg) scale(1) } 75%{ transform: translateY(6px) rotate(-4deg) scale(1.02) }
+}
+
+/* единый hide: одинаковое поведение для флага и печеньки */
+.flag.hide, .cookie.hide {
+  opacity: 0;
+  transform: translateY(-80px) rotate(-8deg) scale(.78);
+  pointer-events:none;
 }
 
 /* Canvas эквалайзера */
 #equalizer {
-  position: absolute;
-  bottom: 60px;
-  width: 90%;
-  max-width: 900px;
-  height: 120px;
-  border-radius: 25px;
-  backdrop-filter: blur(25px) saturate(180%);
-  -webkit-backdrop-filter: blur(25px) saturate(180%);
-  background: rgba(30, 20, 50, 0.15);
-  box-shadow:
-    0 0 30px rgba(180,155,250,0.6),
-    inset 0 0 25px rgba(120,90,220,0.3);
-  overflow: hidden;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width: min(94%, 920px);
+  bottom: clamp(20px, 7vh, 60px);
+  height: clamp(64px, 12vh, 120px);
+  border-radius:20px;
+  background: rgba(30,20,50,0.12);
+  backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: 0 0 30px rgba(180,155,250,0.5), inset 0 0 20px rgba(120,90,220,0.2);
+  overflow:hidden;
+  z-index:18;
 }
+#equalizerCanvas{ width:100%; height:100%; display:block; }
 
-#equalizerCanvas {
-  width: 100%;
-  height: 100%;
-}
-
-/* Фото */
+/* Фото-пузырьки */
 .photo {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 20px;
-  object-fit: cover;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 20px rgba(180,155,250,0.8),
-              0 0 40px rgba(120,90,220,0.5);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  position:absolute;
+  width: clamp(64px, 12vw, 120px);
+  height: clamp(64px, 12vw, 120px);
+  object-fit:cover;
+  border-radius:16px;
+  box-shadow: 0 0 20px rgba(180,155,250,0.85), 0 0 36px rgba(120,90,220,0.45);
+  pointer-events:none;
+  transform: translate(-50%,-50%);
+  transition: transform .28s ease, opacity .28s ease;
+  z-index:22;
 }
 
-/* Снег */
-.snowflake {
-  position: fixed;
-  top: -10px;
-  color: white;
-  font-size: 1em;
-  user-select: none;
-  pointer-events: none;
-  animation: fall linear infinite;
-  opacity: 0.6;
-}
-
-@keyframes fall {
-  to { transform: translateY(110vh) rotate(360deg); }
-}
+/* Снежинки */
+.snowflake{ position:fixed; top:-10px; user-select:none; pointer-events:none; opacity:.6; font-size:12px; animation: fall linear infinite; color:#fff }
+@keyframes fall{ to{ transform: translateY(110vh) rotate(360deg) } }
 
 /* Footer */
-footer {
-  position: absolute;
-  bottom: 20px;
-  text-align: center;
-  font-size: 14px;
-  color: #b080ff;
-}
-footer a {
-  color: #cda4ff;
-  text-decoration: none;
-  margin: 0 6px;
+footer{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:12;
+  font-size: clamp(11px, 2.4vw, 14px);
+  color:#b080ff;
+  text-align:center;
 }
 
-/* --- АДАПТАЦИЯ ДЛЯ ВСЕХ УСТРОЙСТВ --- */
-@media (max-width: 768px) {
-  h1 { font-size: 2em; top: 20px; }
-  .flag { width: 160px; top: 26%; right: 5%; }
-  .cookie { width: 90px; bottom: 15%; left: 6%; }
-  #equalizer { height: 90px; }
-  #playButton { font-size: 1.1em; padding: 12px 30px; }
+/* Media tweaks: phones & tablets */
+@media (max-width: 900px){
+  .flag{ top:14%; }
+  .cookie{ bottom:10%; }
+  h1{ font-size: clamp(1.2rem, 5.5vw, 1.6rem) }
+  .center{ padding-top: 8vh; padding-bottom: 8vh; }
+}
+@media (max-width: 430px){
+  #playButton{ font-size: clamp(.95rem, 4.2vw, 1rem); padding:12px 18px; }
+  .flag{ width: clamp(110px, 28vw, 150px); right:6% }
+  .cookie{ width: clamp(60px,18vw,80px); left:5% }
+  #equalizer{ height: clamp(56px, 11vh, 80px); bottom:28px }
+  .photo{ border-radius:12px; }
 }
 
-@media (max-width: 480px) {
-  h1 { font-size: 1.6em; top: 20px; }
-  .flag { width: 130px; right: 5%; }
-  .cookie { width: 80px; left: 5%; }
-  #equalizer { height: 80px; bottom: 40px; }
-  #playButton { font-size: 1em; padding: 10px 25px; }
+/* планшетная альбомная ориентация — даём чуть больше места */
+@media (min-width: 900px) and (max-height:600px){
+  .center{ padding-top: 6vh; padding-bottom: 6vh; }
+  #playButton{ margin-top: 0; }
 }
 </style>
 </head>
 <body>
+  <div class="app" id="app">
+    <h1 id="title">С Днём Рождения, Даша 🎂💫</h1>
 
-<h1>С Днём Рождения, Даша 🎂💫</h1>
+    <div class="center" aria-hidden="false">
+      <button id="playButton" aria-label="Запустить музыку">Нажми 🎵</button>
+    </div>
 
-<!-- Флаг -->
-<img src="images/flag.png" alt="флаг" class="flag" id="flag">
+    <!-- Декоративные элементы -->
+    <img class="flag" id="flag" src="images/flag.png" alt="флаг">
+    <img class="cookie" id="cookie" src="images/cookie.png" alt="печенька">
 
-<!-- Печенька -->
-<img src="images/cookie.png" alt="печенька" class="cookie" id="cookie">
+    <audio id="bgm" loop playsinline preload="auto">
+      <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg">
+    </audio>
 
-<button id="playButton">Нажми 🎵</button>
+    <div id="equalizer" aria-hidden="true">
+      <canvas id="equalizerCanvas" role="img" aria-label="Эквалайзер"></canvas>
+    </div>
 
-<audio id="bgm" loop>
-  <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg" />
-</audio>
-
-<div id="equalizer">
-  <canvas id="equalizerCanvas"></canvas>
-</div>
-
-<footer>
-  designed by <b>prostozhenyaaa</b><br />
-  <a href="#">Instagram</a> | <a href="#">VK</a> | <a href="#">Telegram</a>
-</footer>
+    <footer>
+      designed by <b>prostozhenyaaa</b><br>
+      <a href="#" style="color:#cda4ff;text-decoration:none;margin:0 6px">Instagram</a>
+      <a href="#" style="color:#cda4ff;text-decoration:none;margin:0 6px">VK</a>
+      <a href="#" style="color:#cda4ff;text-decoration:none;margin:0 6px">Telegram</a>
+    </footer>
+  </div>
 
 <script>
+/* --------- Логика (адаптивный canvas + надёжный старт аудио) ---------- */
+
+const app = document.getElementById('app');
+const playButton = document.getElementById('playButton');
+const flag = document.getElementById('flag');
+const cookie = document.getElementById('cookie');
+const bgm = document.getElementById('bgm');
+const equalizer = document.getElementById('equalizer');
+const canvas = document.getElementById('equalizerCanvas');
+const ctx = canvas.getContext('2d');
+
 const photos = [
-  "images/dasha1.jpg",
-  "images/dasha2.jpg",
-  "images/dasha3.jpg",
-  "images/dasha4.jpg",
-  "images/dasha5.jpg",
+  "images/dasha1.jpg","images/dasha2.jpg","images/dasha3.jpg",
+  "images/dasha4.jpg","images/dasha5.jpg"
 ];
 
-const equalizerDiv = document.getElementById("equalizer");
-const canvas = document.getElementById("equalizerCanvas");
-const ctx = canvas.getContext("2d");
-const bgm = document.getElementById("bgm");
-const playButton = document.getElementById("playButton");
-const flag = document.getElementById("flag");
-const cookie = document.getElementById("cookie");
+let audioCtx = null;
+let source = null;
+let analyser = null;
+let dataArray = null;
+let rafId = null;
+let spawnInterval = null;
+let started = false;
 
-function resizeCanvas() {
-  const style = getComputedStyle(equalizerDiv);
-  canvas.width = parseInt(style.width) * window.devicePixelRatio;
-  canvas.height = parseInt(style.height) * window.devicePixelRatio;
-  canvas.style.width = style.width;
-  canvas.style.height = style.height;
+/* правильный ресайз canvas: используем getBoundingClientRect() */
+function resizeCanvas(){
+  const rect = equalizer.getBoundingClientRect();
+  const w = Math.max(1, Math.round(rect.width));
+  const h = Math.max(1, Math.round(rect.height));
+  const DPR = Math.max(1, window.devicePixelRatio || 1);
+  canvas.width = Math.round(w * DPR);
+  canvas.height = Math.round(h * DPR);
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
   ctx.setTransform(1,0,0,1,0,0);
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  ctx.scale(DPR, DPR);
 }
+window.addEventListener('resize', () => {
+  // debounce-ish: небольшой таймаут
+  clearTimeout(window._eqResizeTimer);
+  window._eqResizeTimer = setTimeout(resizeCanvas, 80);
+});
 resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
 
-let audioCtx, source, analyser, dataArray;
-function setupAudio() {
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  source = audioCtx.createMediaElementSource(bgm);
-  analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 128;
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
-  dataArray = new Uint8Array(analyser.frequencyBinCount);
+/* audio setup */
+function setupAudio(){
+  if(audioCtx) return;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    source = audioCtx.createMediaElementSource(bgm);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 128;
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    console.log('AudioContext created');
+  } catch (err) {
+    console.warn('AudioContext error:', err);
+  }
 }
 
-function drawModernWave(){
-  requestAnimationFrame(drawModernWave);
+/* draw equalizer */
+function drawWave(){
+  rafId = requestAnimationFrame(drawWave);
   if(!analyser) return;
   analyser.getByteFrequencyData(dataArray);
-  const width = canvas.width / window.devicePixelRatio;
-  const height = canvas.height / window.devicePixelRatio;
+  const rect = equalizer.getBoundingClientRect();
+  const width = rect.width;
+  const height = rect.height;
   ctx.clearRect(0,0,width,height);
 
   const points = dataArray.length;
-  const waveLength = width / (points-1);
-  const baseY = height*0.55;
+  const step = width / Math.max(1, points - 1);
+  const baseY = height * 0.55;
 
-  const gradientLine = ctx.createLinearGradient(0,0,width,0);
-  gradientLine.addColorStop(0,"rgba(180,155,250,0.9)");
-  gradientLine.addColorStop(0.5,"rgba(120,90,220,0.8)");
-  gradientLine.addColorStop(1,"rgba(200,160,255,0.9)");
+  const gradStroke = ctx.createLinearGradient(0,0,width,0);
+  gradStroke.addColorStop(0, 'rgba(180,155,250,0.95)');
+  gradStroke.addColorStop(0.5, 'rgba(120,90,220,0.85)');
+  gradStroke.addColorStop(1, 'rgba(200,160,255,0.95)');
 
-  const gradientFill = ctx.createLinearGradient(0,0,0,height);
-  gradientFill.addColorStop(0,"rgba(180,155,250,0.25)");
-  gradientFill.addColorStop(1,"rgba(120,90,220,0.05)");
+  const gradFill = ctx.createLinearGradient(0,0,0,height);
+  gradFill.addColorStop(0, 'rgba(180,155,250,0.22)');
+  gradFill.addColorStop(1, 'rgba(120,90,220,0.03)');
 
-  ctx.lineWidth = 6;
-  ctx.lineJoin = "round";
-  ctx.lineCap = "round";
-  ctx.strokeStyle = gradientLine;
-  ctx.fillStyle = gradientFill;
+  ctx.lineWidth = Math.max(2, Math.min(8, height * 0.06));
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = gradStroke;
+  ctx.fillStyle = gradFill;
+
   ctx.beginPath();
-
   for(let i=0;i<points;i++){
-    const x = i*waveLength;
-    const amp = dataArray[i]/255;
-    const y = baseY 
-      - Math.sin(i*0.3 + performance.now()/500)*25*amp 
-      - Math.sin(i*0.1 + performance.now()/300)*18*amp 
-      - amp*30;
+    const x = i * step;
+    const amp = dataArray[i] / 255;
+    const y = baseY
+      - Math.sin(i * 0.28 + performance.now()/520) * (height * 0.12) * amp
+      - Math.sin(i * 0.09 + performance.now()/320) * (height * 0.08) * amp
+      - amp * (height * 0.18);
 
-    if(i===0) ctx.moveTo(x,y);
+    if(i === 0) ctx.moveTo(x,y);
     else ctx.lineTo(x,y);
   }
-
-  ctx.lineTo(width,height);
-  ctx.lineTo(0,height);
+  ctx.lineTo(width, height);
+  ctx.lineTo(0, height);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 }
 
+/* spawning photos (floating) */
 function spawnPhoto(){
-  const photo = document.createElement("img");
-  photo.src = photos[Math.floor(Math.random()*photos.length)];
-  photo.classList.add("photo");
-  photo.style.left = 50 + Math.random()*(window.innerWidth-100)+"px";
-  document.body.appendChild(photo);
+  const img = document.createElement('img');
+  img.className = 'photo';
+  const src = photos[Math.floor(Math.random() * photos.length)];
+  img.src = src;
+  // keep inside viewport horizontally
+  const left = Math.round(8 + Math.random() * (window.innerWidth - 16));
+  img.style.left = left + 'px';
+  document.body.appendChild(img);
 
-  const startTime = Date.now();
-  const duration = 3500 + Math.random()*1500;
-
-  function animate(){
-    const t = (Date.now() - startTime)/duration;
-    if(t<1){
-      const y = -150 + (window.innerHeight+200)*Math.sin(t*Math.PI/2);
-      const scale = 0.8 + 0.5 * Math.sin(t*Math.PI);
-      const rotate = t*360;
-      const opacity = Math.sin(t*Math.PI);
-      photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
-      photo.style.opacity = opacity;
-      requestAnimationFrame(animate);
+  const start = performance.now();
+  const dur = 2800 + Math.random() * 1700;
+  function anim(){
+    const t = (performance.now() - start) / dur;
+    if(t < 1){
+      const y = -120 + (window.innerHeight + 220) * Math.sin(t * Math.PI / 2);
+      const scale = 0.9 + 0.45 * Math.sin(t * Math.PI);
+      const rot = t * 360;
+      const op = Math.sin(t * Math.PI);
+      img.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rot}deg)`;
+      img.style.opacity = op;
+      requestAnimationFrame(anim);
     } else {
-      photo.remove();
+      img.remove();
     }
   }
-  animate();
+  requestAnimationFrame(anim);
 }
 
-function createSnowflake(){
-  const flake = document.createElement("div");
-  flake.className = "snowflake";
-  flake.style.left = Math.random()*100 + "vw";
-  flake.style.fontSize = (8+Math.random()*12)+"px";
-  flake.style.animationDuration = (5+Math.random()*5)+"s";
-  flake.textContent = "❄";
-  document.body.appendChild(flake);
-  setTimeout(()=>flake.remove(), 10000);
+/* snow */
+function createSnow(){
+  const d = document.createElement('div');
+  d.className = 'snowflake';
+  d.textContent = '❄';
+  d.style.left = Math.random() * 100 + 'vw';
+  d.style.fontSize = (8 + Math.random() * 12) + 'px';
+  d.style.animationDuration = (4 + Math.random() * 6) + 's';
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(), 10000);
 }
-setInterval(createSnowflake, 300);
+setInterval(createSnow, 420);
 
-playButton.addEventListener("click", ()=>{
-    flag.classList.add("hide");
-    cookie.classList.add("hide");
+/* ensure pointerdown covers touch & mouse, robust start */
+async function startSequence(ev){
+  if(started) return;
+  started = true;
+  ev && (ev.preventDefault && ev.preventDefault());
+  setupAudio();
+  try {
+    if(audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
+  } catch(e){ console.warn('resume failed', e); }
 
-    setTimeout(()=>{
-        if(!audioCtx) setupAudio();
-        bgm.play().then(()=>{
-            drawModernWave();
-            setInterval(spawnPhoto, 1300);
-            playButton.style.display = "none";
-        }).catch(err=>console.log(err));
-    }, 500);
+  try {
+    const playPromise = bgm.play();
+    if(playPromise && typeof playPromise.then === 'function'){
+      await playPromise;
+    }
+  } catch(err){
+    console.error('play failed', err);
+    started = false;
+    alert('Не удалось запустить звук: нажмите ещё раз или разрешите звук в настройках браузера.');
+    return;
+  }
+
+  // visuals
+  try {
+    if(!rafId) drawWave();
+    if(!spawnInterval) spawnInterval = setInterval(spawnPhoto, 1400);
+  } catch(e){ console.warn(e); }
+
+  // hide flag/cookie in sync
+  setTimeout(()=>{
+    flag.classList.add('hide');
+    cookie.classList.add('hide');
+  }, 220);
+
+  // hide button with smooth class
+  playButton.classList.add('hidden');
+  setTimeout(()=>{ playButton.style.display = 'none'; }, 900);
+}
+
+/* bind pointerdown and click fallback; pointerdown covers touch+mouse on modern browsers */
+playButton.addEventListener('pointerdown', startSequence, {passive:false});
+playButton.addEventListener('click', startSequence);
+
+/* accessibility: allow space/enter when focused */
+playButton.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); startSequence(e); }
 });
-</script>
 
+/* ensure canvas is resized immediately after play (some devices calculate sizes after layout) */
+bgm.addEventListener('play', () => {
+  setTimeout(resizeCanvas, 80);
+});
+
+/* cleanup on page hide */
+document.addEventListener('visibilitychange', ()=> {
+  if(document.visibilityState === 'hidden'){
+    // stop heavy raf but keep audio playing (optional)
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  } else {
+    if(!rafId && analyser) drawWave();
+  }
+});
+
+console.log('Адаптивный скрипт загружен — ожидаю жест пользователя (pointerdown) для старта.');
+</script>
 </body>
 </html>
