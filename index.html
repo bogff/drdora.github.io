@@ -21,7 +21,6 @@ body {
   overflow: hidden;
 }
 
-/* Заголовок */
 h1 {
   position: absolute;
   top: 10%;
@@ -35,7 +34,7 @@ h1 {
 
 @keyframes fadeIn { to { opacity: 1; } }
 
-/* === ФЛАГ === */
+/* Флаг */
 .flag {
   position: absolute;
   top: 15%;
@@ -68,17 +67,18 @@ h1 {
   pointer-events: none;
 }
 
-/* === ПЕЧЕНЬКА === */
+/* Печенька */
 .cookie {
   position: absolute;
   bottom: 15%;
   left: 5%;
   width: clamp(80px, 12vw, 120px);
-  opacity: 0;
-  transform: scale(0.8);
+  opacity: 1;
+  transform: scale(1);
   filter: drop-shadow(0 0 15px rgba(180,155,250,0.6))
           drop-shadow(0 0 30px rgba(120,90,220,0.3));
   animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 @keyframes cookieAppear {
@@ -93,7 +93,13 @@ h1 {
   75% { transform: translateY(8px) rotate(-4deg) scale(1.03); }
 }
 
-/* Кнопка запуска музыки */
+.cookie.hide {
+  opacity: 0;
+  transform: translateY(80px) rotate(20deg) scale(0.7);
+  pointer-events: none;
+}
+
+/* Кнопка */
 #playButton {
   padding: clamp(10px, 1.5vw, 15px) clamp(20px, 4vw, 40px);
   font-size: clamp(1em, 2.5vw, 1.3em);
@@ -124,7 +130,6 @@ h1 {
   height: clamp(80px, 15vw, 120px);
   border-radius: 25px;
   backdrop-filter: blur(25px) saturate(180%);
-  -webkit-backdrop-filter: blur(25px) saturate(180%);
   background: rgba(30, 20, 50, 0.15);
   box-shadow:
     0 0 30px rgba(180,155,250,0.6),
@@ -181,7 +186,7 @@ footer a {
   margin: 0 6px;
 }
 
-/* --- Медиа-запросы для адаптивности --- */
+/* Media queries */
 @media (max-width: 768px) {
   h1 { font-size: 2em; top: 5%; }
   .flag { top: 12%; width: 30vw; }
@@ -202,10 +207,7 @@ footer a {
 
 <h1>С Днём Рождения, Даша 🎂💫</h1>
 
-<!-- Флаг -->
 <img src="images/flag.png" alt="флаг" class="flag" id="flag">
-
-<!-- Печенька -->
 <img src="images/cookie.png" alt="печенька" class="cookie" id="cookie">
 
 <button id="playButton">Нажми 🎵</button>
@@ -264,7 +266,7 @@ function setupAudio() {
   dataArray = new Uint8Array(analyser.frequencyBinCount);
 }
 
-// --- Новый современный эквалайзер ---
+// Эквалайзер
 function drawModernWave(){
   requestAnimationFrame(drawModernWave);
   if(!analyser) return;
@@ -312,12 +314,12 @@ function drawModernWave(){
   ctx.stroke();
 }
 
-// --- Фото ---
+// Фото
 function spawnPhoto(){
   const photo = document.createElement("img");
   photo.src = photos[Math.floor(Math.random()*photos.length)];
   photo.classList.add("photo");
-  photo.style.left = 5 + Math.random() * (window.innerWidth - 10) + "px"; // адаптивно
+  photo.style.left = 5 + Math.random() * (window.innerWidth - 10) + "px"; 
   document.body.appendChild(photo);
 
   const startTime = Date.now();
@@ -340,7 +342,7 @@ function spawnPhoto(){
   animate();
 }
 
-// --- Снег ---
+// Снег
 function createSnowflake(){
   const flake = document.createElement("div");
   flake.className = "snowflake";
@@ -353,10 +355,11 @@ function createSnowflake(){
 }
 setInterval(createSnowflake, 300);
 
-// --- Кнопка запуска ---
+// Кнопка
 playButton.addEventListener("click", ()=>{
-  flag.classList.add("hide"); 
-  cookie.style.opacity = 1;
+  // Скрыть флаг и печеньку
+  flag.classList.add("hide");
+  cookie.classList.add("hide");
 
   setTimeout(()=>{
     if(!audioCtx) setupAudio();
