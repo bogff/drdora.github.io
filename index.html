@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>С Днём Рождения, Даша 💖</title>
+<title>С Днём Рождения, Даша 💜</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -15,9 +15,9 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  background: linear-gradient(135deg, #1a1a2e, #3e3a5e);
   position: relative;
-  color: white;
+  color: #d0cde1;
   overflow: hidden;
 }
 
@@ -27,8 +27,8 @@ h1 {
   top: 10%;
   font-size: 3em;
   text-align: center;
-  color: #ff99cc;
-  text-shadow: 0 0 10px #ff66cc, 0 0 30px #ff66ff;
+  color: #c4b6f5;
+  text-shadow: 0 0 10px #8b7cf6, 0 0 25px #a593f9;
   opacity: 0;
   animation: fadeIn 3s forwards;
 }
@@ -42,8 +42,8 @@ h1 {
   right: 10%;
   width: 220px;
   opacity: 1;
-  filter: drop-shadow(0 0 15px rgba(255,102,204,0.7))
-          drop-shadow(0 0 30px rgba(255,182,193,0.4));
+  filter: drop-shadow(0 0 15px rgba(180,155,250,0.7))
+          drop-shadow(0 0 30px rgba(150,120,240,0.4));
   transform-origin: left center;
   animation: flagAppear 1.5s ease forwards 1s, flagWave 5s ease-in-out infinite 2.5s;
   transition: opacity 1s ease, transform 1s ease;
@@ -76,8 +76,8 @@ h1 {
   width: 120px;
   opacity: 0;
   transform: scale(0.8);
-  filter: drop-shadow(0 0 15px rgba(255,182,193,0.6))
-          drop-shadow(0 0 30px rgba(255,102,204,0.3));
+  filter: drop-shadow(0 0 15px rgba(180,155,250,0.6))
+          drop-shadow(0 0 30px rgba(150,120,240,0.3));
   animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
 }
 
@@ -99,12 +99,12 @@ h1 {
   font-size: 1.3em;
   border: none;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
-  color: #fff;
+  color: #d0cde1;
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(255, 102, 204, 0.6);
+  box-shadow: 0 0 20px rgba(150,120,240,0.6);
   transition: 0.3s;
   position: absolute;
   top: 50%;
@@ -113,7 +113,7 @@ h1 {
 
 #playButton:hover {
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 0 40px rgba(255, 102, 204, 0.9);
+  box-shadow: 0 0 40px rgba(150,120,240,0.9);
 }
 
 /* Canvas эквалайзера */
@@ -126,10 +126,10 @@ h1 {
   border-radius: 20px;
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
-  background: rgba(255, 102, 204, 0.15);
+  background: rgba(150,120,240,0.15);
   box-shadow:
-    0 0 30px rgba(255, 102, 204, 0.7),
-    inset 0 0 15px rgba(255, 182, 193, 0.5);
+    0 0 30px rgba(150,120,240,0.7),
+    inset 0 0 15px rgba(180,155,250,0.5);
   overflow: hidden;
 }
 
@@ -147,8 +147,8 @@ h1 {
   object-fit: cover;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 20px rgba(255, 102, 204, 0.8),
-              0 0 40px rgba(255, 102, 255, 0.5);
+  box-shadow: 0 0 20px rgba(150,120,240,0.8),
+              0 0 40px rgba(180,155,250,0.5);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -156,7 +156,7 @@ h1 {
 .snowflake {
   position: absolute;
   top: -10px;
-  background: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.4);
   border-radius: 50%;
   pointer-events: none;
   z-index: 1000;
@@ -174,10 +174,10 @@ footer {
   bottom: 20px;
   text-align: center;
   font-size: 14px;
-  color: #ff99cc;
+  color: #c4b6f5;
 }
 footer a {
-  color: #ff66cc;
+  color: #a593f9;
   text-decoration: none;
   margin: 0 6px;
 }
@@ -185,7 +185,7 @@ footer a {
 </head>
 <body>
 
-<h1>С Днём Рождения, Даша 🎂💫</h1>
+<h1>С Днём Рождения, Даша 💜</h1>
 
 <!-- Флаг -->
 <img src="images/flag.png" alt="флаг" class="flag" id="flag">
@@ -226,10 +226,11 @@ setInterval(createSnowflake, 300);
 
 // --- Фото из папки images ---
 const photos = [
-  "images/dora1.jpg",
-  "images/dora2.jpg",
-  "images/dora3.jpg",
-  "images/dora4.jpg"
+  "images/dasha1.jpg",
+  "images/dasha2.jpg",
+  "images/dasha3.jpg",
+  "images/dasha4.jpg"
+  "images/dasha5.jpg"
 ];
 
 const equalizerDiv = document.getElementById("equalizer");
@@ -278,12 +279,12 @@ function drawWave() {
   ctx.lineCap = "round";
 
   const gradientLine = ctx.createLinearGradient(0,0,width,0);
-  gradientLine.addColorStop(0,"rgba(255,102,204,1)");
-  gradientLine.addColorStop(1,"rgba(180,50,230,1)");
+  gradientLine.addColorStop(0,"rgba(180,155,250,1)");
+  gradientLine.addColorStop(1,"rgba(120,90,220,1)");
 
   const gradientFill = ctx.createLinearGradient(0,0,0,height);
-  gradientFill.addColorStop(0,"rgba(255,102,204,0.4)");
-  gradientFill.addColorStop(1,"rgba(180,50,230,0.05)");
+  gradientFill.addColorStop(0,"rgba(180,155,250,0.4)");
+  gradientFill.addColorStop(1,"rgba(120,90,220,0.05)");
 
   ctx.strokeStyle = gradientLine;
   ctx.fillStyle = gradientFill;
