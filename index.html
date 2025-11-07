@@ -21,7 +21,6 @@ body {
   position: relative;
 }
 
-/* Заголовок */
 h1 {
   font-size: clamp(1.8em, 4vw, 3em);
   text-align: center;
@@ -31,10 +30,9 @@ h1 {
   animation: fadeIn 3s forwards;
   margin-top: 10vh;
 }
-
 @keyframes fadeIn { to { opacity: 1; } }
 
-/* === ФЛАГ === */
+/* Флаг */
 .flag {
   position: absolute;
   top: 20%;
@@ -52,7 +50,6 @@ h1 {
   from { transform: translateY(-30px) scale(0.9); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
-
 @keyframes flagWave {
   0% { transform: rotateZ(-2deg) skewY(0deg); }
   25% { transform: rotateZ(2deg) skewY(2deg); }
@@ -61,7 +58,7 @@ h1 {
   100% { transform: rotateZ(-2deg) skewY(0deg); }
 }
 
-/* === ПЕЧЕНЬКА === */
+/* Печенька */
 .cookie {
   position: absolute;
   bottom: 18%;
@@ -79,7 +76,6 @@ h1 {
   from { transform: translateY(30px) scale(0.8); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
-
 @keyframes cookieFloat {
   0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
   25% { transform: translateY(-10px) rotate(-6deg) scale(1.05); }
@@ -87,7 +83,7 @@ h1 {
   75% { transform: translateY(8px) rotate(-4deg) scale(1.03); }
 }
 
-/* === ОБЩИЙ ЭФФЕКТ ИСЧЕЗНОВЕНИЯ === */
+/* Эффект исчезновения */
 .flag.hide,
 .cookie.hide {
   opacity: 0;
@@ -96,7 +92,7 @@ h1 {
   transition: all 1s ease-in-out;
 }
 
-/* Кнопка запуска музыки */
+/* Кнопка */
 #playButton {
   padding: 14px 35px;
   font-size: clamp(1em, 3vw, 1.3em);
@@ -111,13 +107,12 @@ h1 {
   position: relative;
   margin-top: 25vh;
 }
-
 #playButton:hover {
   transform: scale(1.1);
   box-shadow: 0 0 40px rgba(180,155,250,0.9);
 }
 
-/* Canvas эквалайзера */
+/* Эквалайзер */
 #equalizer {
   position: absolute;
   bottom: 60px;
@@ -132,7 +127,6 @@ h1 {
     inset 0 0 25px rgba(120,90,220,0.3);
   overflow: hidden;
 }
-
 #equalizerCanvas {
   width: 100%;
   height: 100%;
@@ -163,7 +157,6 @@ h1 {
   animation: fall linear infinite;
   opacity: 0.6;
 }
-
 @keyframes fall {
   to { transform: translateY(110vh) rotate(360deg); }
 }
@@ -182,13 +175,12 @@ footer a {
   margin: 0 6px;
 }
 
-/* === АДАПТАЦИЯ === */
+/* Адаптация */
 @media (max-width: 600px) {
   .flag { right: 5%; top: 15%; }
   .cookie { left: 5%; bottom: 10%; }
   #equalizer { bottom: 40px; }
 }
-
 @media (orientation: landscape) and (max-height: 500px) {
   h1 { margin-top: 5vh; font-size: 2em; }
   #playButton { margin-top: 10vh; }
@@ -199,7 +191,6 @@ footer a {
 <body>
 
 <h1>С Днём Рождения, Даша 🎂💫</h1>
-
 <img src="images/flag.png" alt="флаг" class="flag" id="flag">
 <img src="images/cookie.png" alt="печенька" class="cookie" id="cookie">
 
@@ -258,7 +249,6 @@ function setupAudio() {
   dataArray = new Uint8Array(analyser.frequencyBinCount);
 }
 
-// Эквалайзер
 function drawModernWave(){
   requestAnimationFrame(drawModernWave);
   if(!analyser) return;
@@ -306,7 +296,6 @@ function drawModernWave(){
   ctx.stroke();
 }
 
-// Фото
 function spawnPhoto(){
   const photo = document.createElement("img");
   photo.src = photos[Math.floor(Math.random()*photos.length)];
@@ -334,7 +323,6 @@ function spawnPhoto(){
   animate();
 }
 
-// Снег
 function createSnowflake(){
   const flake = document.createElement("div");
   flake.className = "snowflake";
@@ -347,25 +335,20 @@ function createSnowflake(){
 }
 setInterval(createSnowflake, 300);
 
-// Кнопка запуска
-playButton.addEventListener("click", ()=>{
-  flag.style.animation = "none";
-  cookie.style.animation = "none";
-  void flag.offsetHeight;
-  void cookie.offsetHeight;
-
-  // Плавно исчезают одновременно
-  flag.classList.add("hide");
-  cookie.classList.add("hide");
-
-  setTimeout(()=>{
+playButton.addEventListener("click", async ()=>{
+  try {
     if(!audioCtx) setupAudio();
-    bgm.play().then(()=>{
-      drawModernWave();
-      setInterval(spawnPhoto, 1300);
-      playButton.style.display = "none";
-    });
-  }, 800);
+    await bgm.play();
+    drawModernWave();
+    setInterval(spawnPhoto, 1300);
+
+    // теперь анимация исчезновения
+    flag.classList.add("hide");
+    cookie.classList.add("hide");
+    playButton.style.display = "none";
+  } catch (e) {
+    alert("⚠️ Разреши воспроизведение звука — нажми кнопку ещё раз");
+  }
 });
 </script>
 </body>
