@@ -42,11 +42,11 @@ h1 {
   right: 10%;
   width: 220px;
   opacity: 0;
-  animation: flagAppear 2s ease forwards 1s, flagWave 5s ease-in-out infinite 3s;
   filter: drop-shadow(0 0 15px rgba(255,102,204,0.7))
           drop-shadow(0 0 30px rgba(255,182,193,0.4));
   transform-origin: left center;
-  transition: opacity 1.2s ease, transform 1.2s ease;
+  animation: flagAppear 1.5s ease forwards 1s, flagWave 5s ease-in-out infinite 2.5s;
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 @keyframes flagAppear {
@@ -54,6 +54,7 @@ h1 {
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
+/* "развевание" флага */
 @keyframes flagWave {
   0% { transform: rotateZ(-2deg) skewY(0deg); }
   25% { transform: rotateZ(2deg) skewY(2deg); }
@@ -62,23 +63,24 @@ h1 {
   100% { transform: rotateZ(-2deg) skewY(0deg); }
 }
 
-/* эффект исчезновения флага */
+/* эффект исчезновения */
 .flag.hide {
   opacity: 0;
-  transform: translateY(-50px) rotate(-10deg) scale(0.8);
+  transform: translateY(-80px) rotate(-10deg) scale(0.8);
+  pointer-events: none;
 }
 
 /* === ПЕЧЕНЬКА === */
 .cookie {
   position: absolute;
-  bottom: 20%;
+  bottom: 18%;
   left: 10%;
   width: 120px;
   opacity: 0;
   transform: scale(0.8);
-  animation: cookieAppear 2s ease forwards 3s, cookieFloat 6s ease-in-out infinite 5s;
   filter: drop-shadow(0 0 15px rgba(255,182,193,0.6))
           drop-shadow(0 0 30px rgba(255,102,204,0.3));
+  animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
 }
 
 @keyframes cookieAppear {
@@ -88,9 +90,9 @@ h1 {
 
 @keyframes cookieFloat {
   0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-  25% { transform: translateY(-10px) rotate(-8deg) scale(1.05); }
-  50% { transform: translateY(0) rotate(6deg) scale(1); }
-  75% { transform: translateY(10px) rotate(-4deg) scale(1.03); }
+  25% { transform: translateY(-10px) rotate(-6deg) scale(1.05); }
+  50% { transform: translateY(0) rotate(4deg) scale(1); }
+  75% { transform: translateY(8px) rotate(-4deg) scale(1.03); }
 }
 
 /* Кнопка запуска музыки */
@@ -171,13 +173,14 @@ footer a {
 
 <h1>С Днём Рождения, Даша 🎂💫</h1>
 
-<!-- Флаг (появляется до нажатия кнопки) -->
-<img src="images/flag.png" alt="флаг" class="flag" id="flag" />
+<!-- Флаг -->
+<img src="images/flag.png" alt="флаг" class="flag" id="flag">
 
 <!-- Печенька -->
-<img src="images/cookie.png" alt="печенька" class="cookie" />
+<img src="images/cookie.png" alt="печенька" class="cookie" id="cookie">
 
 <button id="playButton">Нажми 🎵</button>
+
 <audio id="bgm" loop>
   <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg" />
 </audio>
@@ -192,7 +195,6 @@ footer a {
 </footer>
 
 <script>
-// --- Фото для анимации ---
 const photos = [
   "images/dasha1.jpg",
   "images/dasha2.jpg",
@@ -201,7 +203,6 @@ const photos = [
   "images/dasha5.jpg",
 ];
 
-// --- Canvas эквалайзер ---
 const equalizerDiv = document.getElementById("equalizer");
 const canvas = document.getElementById("equalizerCanvas");
 const ctx = canvas.getContext("2d");
@@ -274,7 +275,6 @@ function drawWave() {
   ctx.fill();
 }
 
-// --- Анимация фото ---
 function spawnPhoto(){
   const photo = document.createElement("img");
   photo.src = photos[Math.floor(Math.random()*photos.length)];
@@ -304,10 +304,8 @@ function spawnPhoto(){
 
 // --- Кнопка запуска ---
 playButton.addEventListener("click", ()=>{
-  // флаг исчезает
-  flag.classList.add("hide");
+  flag.classList.add("hide"); // эффект исчезновения флага
 
-  // через 1 секунду начинаем музыку и анимации
   setTimeout(()=>{
     if(!audioCtx) setupAudio();
     bgm.play().then(()=>{
