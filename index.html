@@ -42,31 +42,30 @@ h1 {
   right: 10%;
   width: 220px;
   opacity: 0;
-  animation: flagAppear 2s ease forwards 2s, flagWave 5s ease-in-out infinite 4s;
+  animation: flagAppear 2s ease forwards 1s, flagWave 5s ease-in-out infinite 3s;
   filter: drop-shadow(0 0 15px rgba(255,102,204,0.7))
           drop-shadow(0 0 30px rgba(255,182,193,0.4));
   transform-origin: left center;
+  transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
-/* плавное появление */
 @keyframes flagAppear {
-  from {
-    transform: translateY(-30px) scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+  from { transform: translateY(-30px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* "развевание" флага */
 @keyframes flagWave {
   0% { transform: rotateZ(-2deg) skewY(0deg); }
   25% { transform: rotateZ(2deg) skewY(2deg); }
   50% { transform: rotateZ(-1deg) skewY(-2deg); }
   75% { transform: rotateZ(1deg) skewY(1deg); }
   100% { transform: rotateZ(-2deg) skewY(0deg); }
+}
+
+/* эффект исчезновения флага */
+.flag.hide {
+  opacity: 0;
+  transform: translateY(-50px) rotate(-10deg) scale(0.8);
 }
 
 /* === ПЕЧЕНЬКА === */
@@ -82,19 +81,11 @@ h1 {
           drop-shadow(0 0 30px rgba(255,102,204,0.3));
 }
 
-/* появление */
 @keyframes cookieAppear {
-  from {
-    transform: translateY(30px) scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+  from { transform: translateY(30px) scale(0.8); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* плавное "парение" и вращение */
 @keyframes cookieFloat {
   0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
   25% { transform: translateY(-10px) rotate(-8deg) scale(1.05); }
@@ -180,8 +171,8 @@ footer a {
 
 <h1>С Днём Рождения, Даша 🎂💫</h1>
 
-<!-- Флаг -->
-<img src="images/flag.png" alt="флаг" class="flag" />
+<!-- Флаг (появляется до нажатия кнопки) -->
+<img src="images/flag.png" alt="флаг" class="flag" id="flag" />
 
 <!-- Печенька -->
 <img src="images/cookie.png" alt="печенька" class="cookie" />
@@ -216,6 +207,7 @@ const canvas = document.getElementById("equalizerCanvas");
 const ctx = canvas.getContext("2d");
 const bgm = document.getElementById("bgm");
 const playButton = document.getElementById("playButton");
+const flag = document.getElementById("flag");
 
 function resizeCanvas() {
   const style = getComputedStyle(equalizerDiv);
@@ -312,12 +304,18 @@ function spawnPhoto(){
 
 // --- Кнопка запуска ---
 playButton.addEventListener("click", ()=>{
-  if(!audioCtx) setupAudio();
-  bgm.play().then(()=>{
-    drawWave();
-    setInterval(spawnPhoto, 1500);
-    playButton.style.display = "none";
-  });
+  // флаг исчезает
+  flag.classList.add("hide");
+
+  // через 1 секунду начинаем музыку и анимации
+  setTimeout(()=>{
+    if(!audioCtx) setupAudio();
+    bgm.play().then(()=>{
+      drawWave();
+      setInterval(spawnPhoto, 1500);
+      playButton.style.display = "none";
+    });
+  }, 1000);
 });
 </script>
 
