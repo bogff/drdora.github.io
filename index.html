@@ -15,7 +15,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(135deg, #1a1a2e, #3e3a5e);
+  background: linear-gradient(145deg, #121025, #2e244a);
   position: relative;
   color: #d0cde1;
   overflow: hidden;
@@ -28,7 +28,7 @@ h1 {
   font-size: 3em;
   text-align: center;
   color: #c4b6f5;
-  text-shadow: 0 0 10px #8b7cf6, 0 0 25px #a593f9;
+  text-shadow: 0 0 15px #8b7cf6, 0 0 35px #a593f9;
   opacity: 0;
   animation: fadeIn 3s forwards;
 }
@@ -45,26 +45,25 @@ h1 {
   filter: drop-shadow(0 0 15px rgba(180,155,250,0.7))
           drop-shadow(0 0 30px rgba(150,120,240,0.4));
   transform-origin: left center;
-  animation: flagAppear 1.5s ease forwards 1s, flagWave 5s ease-in-out infinite 2.5s;
-  transition: opacity 1s ease, transform 1s ease;
+  animation: flagAppear 1.5s ease forwards 1s, flagWave 4s ease-in-out infinite;
 }
 
 @keyframes flagAppear {
-  from { transform: translateY(-30px) scale(0.9); opacity: 0; }
+  from { transform: translateY(-40px) scale(0.7); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 @keyframes flagWave {
-  0% { transform: rotateZ(-2deg) skewY(0deg); }
-  25% { transform: rotateZ(2deg) skewY(2deg); }
-  50% { transform: rotateZ(-1deg) skewY(-2deg); }
-  75% { transform: rotateZ(1deg) skewY(1deg); }
-  100% { transform: rotateZ(-2deg) skewY(0deg); }
+  0% { transform: rotateZ(-3deg) skewY(0deg); }
+  25% { transform: rotateZ(3deg) skewY(2deg); }
+  50% { transform: rotateZ(-2deg) skewY(-1deg); }
+  75% { transform: rotateZ(2deg) skewY(1deg); }
+  100% { transform: rotateZ(-3deg) skewY(0deg); }
 }
 
 .flag.hide {
   opacity: 0;
-  transform: translateY(-80px) rotate(-10deg) scale(0.8);
+  transform: translateY(-100px) rotate(-15deg) scale(0.8);
   pointer-events: none;
 }
 
@@ -75,25 +74,26 @@ h1 {
   left: 10%;
   width: 120px;
   opacity: 0;
-  transform: scale(0.8);
+  transform: scale(0.7);
   filter: drop-shadow(0 0 15px rgba(180,155,250,0.6))
           drop-shadow(0 0 30px rgba(150,120,240,0.3));
-  animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
+  animation: cookieAppear 2s ease forwards 2s, cookieFloat 6s ease-in-out infinite alternate;
 }
 
 @keyframes cookieAppear {
-  from { transform: translateY(30px) scale(0.8); opacity: 0; }
+  from { transform: translateY(30px) scale(0.7); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 @keyframes cookieFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-  25% { transform: translateY(-10px) rotate(-6deg) scale(1.05); }
-  50% { transform: translateY(0) rotate(4deg) scale(1); }
-  75% { transform: translateY(8px) rotate(-4deg) scale(1.03); }
+  0% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-12px) scale(1.05) rotate(-4deg); }
+  50% { transform: translateY(0) scale(1); }
+  75% { transform: translateY(10px) scale(1.03) rotate(3deg); }
+  100% { transform: translateY(0) scale(1); }
 }
 
-/* Кнопка запуска музыки */
+/* Кнопка */
 #playButton {
   padding: 15px 40px;
   font-size: 1.3em;
@@ -143,20 +143,21 @@ h1 {
   position: absolute;
   width: 120px;
   height: 120px;
-  border-radius: 20px;
+  border-radius: 18px;
   object-fit: cover;
   pointer-events: none;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.8);
+  opacity: 0;
   box-shadow: 0 0 20px rgba(150,120,240,0.8),
               0 0 40px rgba(180,155,250,0.5);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
 /* Снежинки */
 .snowflake {
   position: absolute;
   top: -10px;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.35);
   border-radius: 50%;
   pointer-events: none;
   z-index: 1000;
@@ -164,8 +165,9 @@ h1 {
 }
 
 @keyframes fall {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(110vh); }
+  0% { transform: translateY(0) rotate(0deg); opacity:0.5; }
+  50% { opacity:1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity:0.5; }
 }
 
 /* Footer */
@@ -187,10 +189,7 @@ footer a {
 
 <h1>С Днём Рождения, Даша 💜</h1>
 
-<!-- Флаг -->
 <img src="images/flag.png" alt="флаг" class="flag" id="flag">
-
-<!-- Печенька -->
 <img src="images/cookie.png" alt="печенька" class="cookie" id="cookie">
 
 <button id="playButton">Нажми 🎵</button>
@@ -217,20 +216,20 @@ function createSnowflake(){
   snowflake.style.width = size+"px";
   snowflake.style.height = size+"px";
   snowflake.style.left = Math.random()*window.innerWidth + "px";
-  snowflake.style.animationDuration = (5 + Math.random()*5) + "s";
-  snowflake.style.opacity = Math.random();
+  snowflake.style.animationDuration = (5 + Math.random()*6) + "s";
+  snowflake.style.opacity = Math.random() * 0.6 + 0.4;
   document.body.appendChild(snowflake);
-  setTimeout(()=>snowflake.remove(), 10000);
+  setTimeout(()=>snowflake.remove(), 11000);
 }
-setInterval(createSnowflake, 300);
+setInterval(createSnowflake, 250);
 
 // --- Фото из папки images ---
 const photos = [
   "images/dasha1.jpg",
   "images/dasha2.jpg",
   "images/dasha3.jpg",
-  "images/dasha4.jpg"
-  "images/dasha5.jpg"
+  "images/dasha4.jpg",
+  "images/dasha5.jpg",
 ];
 
 const equalizerDiv = document.getElementById("equalizer");
@@ -283,7 +282,7 @@ function drawWave() {
   gradientLine.addColorStop(1,"rgba(120,90,220,1)");
 
   const gradientFill = ctx.createLinearGradient(0,0,0,height);
-  gradientFill.addColorStop(0,"rgba(180,155,250,0.4)");
+  gradientFill.addColorStop(0,"rgba(180,155,250,0.3)");
   gradientFill.addColorStop(1,"rgba(120,90,220,0.05)");
 
   ctx.strokeStyle = gradientLine;
@@ -293,8 +292,8 @@ function drawWave() {
   for (let i=0;i<pointsCount;i++){
     const x = i*waveLength;
     const amp = dataArray[i]/255;
-    const y = baseY - (Math.sin(i*0.3 + performance.now()/400)*20 +
-                        Math.sin(i*0.1 + performance.now()/200)*15)*amp -
+    const y = baseY - (Math.sin(i*0.3 + performance.now()/400)*18 +
+                        Math.sin(i*0.1 + performance.now()/200)*12)*amp -
                         amp*40;
     if(i===0) ctx.moveTo(x,y);
     else ctx.lineTo(x,y);
@@ -315,15 +314,15 @@ function spawnPhoto(){
   document.body.appendChild(photo);
 
   const startTime = Date.now();
-  const duration = 3500 + Math.random()*1500;
+  const duration = 4000 + Math.random()*2000;
 
   function animate(){
     const t = (Date.now() - startTime)/duration;
     if(t<1){
-      const y = -150 + (window.innerHeight+200)*Math.sin(t*Math.PI/2);
-      const scale = 0.8 + 0.5 * Math.sin(t*Math.PI);
+      const y = -150 + (window.innerHeight+200)*t;
+      const scale = 0.8 + 0.5*t;
       const rotate = t*360;
-      const opacity = Math.sin(t*Math.PI);
+      const opacity = t<0.3 ? t*3 : 1-t*0.3;
       photo.style.transform = `translate(-50%, ${y}px) scale(${scale}) rotate(${rotate}deg)`;
       photo.style.opacity = opacity;
       requestAnimationFrame(animate);
@@ -336,14 +335,14 @@ function spawnPhoto(){
 
 // --- Кнопка запуска ---
 playButton.addEventListener("click", ()=>{
-  flag.classList.add("hide"); // исчезание флага
-  cookie.style.opacity = 1; // появление печеньки
+  flag.classList.add("hide"); 
+  cookie.style.opacity = 1;
 
   setTimeout(()=>{
     if(!audioCtx) setupAudio();
     bgm.play().then(()=>{
       drawWave();
-      setInterval(spawnPhoto, 1500);
+      setInterval(spawnPhoto, 1300);
       playButton.style.display = "none";
     });
   }, 1000);
