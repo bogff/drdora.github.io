@@ -198,6 +198,18 @@ footer{
   .center{ padding-top: 6vh; padding-bottom: 6vh; }
   #playButton{ margin-top: 0; }
 }
+
+/* Запасные изображения на случай ошибки загрузки */
+.fallback-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(120,90,220,0.2);
+  border: 2px dashed rgba(180,155,250,0.5);
+  color: #cda4ff;
+  font-size: 12px;
+  text-align: center;
+}
 </style>
 </head>
 <body>
@@ -209,11 +221,12 @@ footer{
     </div>
 
     <!-- Декоративные элементы -->
-    <img class="flag" id="flag" src="images/flag.png" alt="флаг">
-    <img class="cookie" id="cookie" src="images/cookie.png" alt="печенька">
+    <img class="flag" id="flag" src="images/flag.png" alt="флаг" onerror="this.onerror=null; this.classList.add('fallback-image'); this.style.display='none';">
+    <img class="cookie" id="cookie" src="images/cookie.png" alt="печенька" onerror="this.onerror=null; this.classList.add('fallback-image'); this.style.display='none';">
 
     <audio id="bgm" loop playsinline preload="auto">
       <source src="music/papa_temnogo_princa.mp3" type="audio/mpeg">
+      Ваш браузер не поддерживает аудио элемент.
     </audio>
 
     <div id="equalizer" aria-hidden="true">
@@ -240,10 +253,39 @@ const equalizer = document.getElementById('equalizer');
 const canvas = document.getElementById('equalizerCanvas');
 const ctx = canvas.getContext('2d');
 
+// Запасные изображения на случай ошибки загрузки
 const photos = [
   "images/dasha1.jpg","images/dasha2.jpg","images/dasha3.jpg",
   "images/dasha4.jpg","images/dasha5.jpg"
 ];
+
+// Создаем запасные изображения для демонстрации
+const fallbackImages = [];
+for(let i = 1; i <= 5; i++) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 200;
+  canvas.height = 200;
+  const ctx = canvas.getContext('2d');
+  
+  // Градиентный фон
+  const gradient = ctx.createLinearGradient(0, 0, 200, 200);
+  gradient.addColorStop(0, '#8a2be2');
+  gradient.addColorStop(1, '#4b0082');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 200, 200);
+  
+  // Текст
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 24px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(`Даша ${i}`, 100, 100);
+  
+  ctx.font = '16px Arial';
+  ctx.fillText('🎂 С Днём Рождения!', 100, 140);
+  
+  fallbackImages.push(canvas.toDataURL());
+}
 
 let audioCtx = null;
 let source = null;
@@ -342,8 +384,19 @@ function drawWave(){
 function spawnPhoto(){
   const img = document.createElement('img');
   img.className = 'photo';
-  const src = photos[Math.floor(Math.random() * photos.length)];
-  img.src = src;
+  
+  // Используем случайное изображение или запасное
+  const randomIndex = Math.floor(Math.random() * photos.length);
+  img.src = photos[randomIndex];
+  
+  // Обработчик ошибки загрузки изображения
+  img.onerror = function() {
+    this.src = fallbackImages[randomIndex];
+    this.alt = 'Поздравительное изображение ' + (randomIndex + 1);
+  };
+  
+  img.alt = 'Фото Даши ' + (randomIndex + 1);
+  
   // keep inside viewport horizontally
   const left = Math.round(8 + Math.random() * (window.innerWidth - 16));
   img.style.left = left + 'px';
@@ -443,6 +496,17 @@ document.addEventListener('visibilitychange', ()=> {
   } else {
     if(!rafId && analyser) drawWave();
   }
+});
+
+// Предзагрузка критически важных ресурсов
+window.addEventListener('load', function() {
+  // Проверяем доступность изображений
+  [flag, cookie].forEach(img => {
+    if(img.complete && img.naturalHeight === 0) {
+      img.classList.add('fallback-image');
+      img.style.display = 'none';
+    }
+  });
 });
 
 console.log('Адаптивный скрипт загружен — ожидаю жест пользователя (pointerdown) для старта.');
