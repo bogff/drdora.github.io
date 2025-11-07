@@ -54,7 +54,6 @@ h1 {
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* "развевание" флага */
 @keyframes flagWave {
   0% { transform: rotateZ(-2deg) skewY(0deg); }
   25% { transform: rotateZ(2deg) skewY(2deg); }
@@ -80,7 +79,18 @@ h1 {
   transform: scale(0.8);
   filter: drop-shadow(0 0 15px rgba(255,182,193,0.6))
           drop-shadow(0 0 30px rgba(255,102,204,0.3));
-  animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+/* появление печеньки */
+.cookie.show {
+  animation: cookieAppear 2s ease forwards, cookieFloat 6s ease-in-out infinite 2s;
+}
+
+/* исчезновение печеньки */
+.cookie.hide {
+  opacity: 0;
+  transform: translateY(60px) scale(0.6) rotate(-10deg);
 }
 
 @keyframes cookieAppear {
@@ -209,6 +219,7 @@ const ctx = canvas.getContext("2d");
 const bgm = document.getElementById("bgm");
 const playButton = document.getElementById("playButton");
 const flag = document.getElementById("flag");
+const cookie = document.getElementById("cookie");
 
 function resizeCanvas() {
   const style = getComputedStyle(equalizerDiv);
@@ -304,7 +315,11 @@ function spawnPhoto(){
 
 // --- Кнопка запуска ---
 playButton.addEventListener("click", ()=>{
-  flag.classList.add("hide"); // эффект исчезновения флага
+  // исчезновение флага
+  flag.classList.add("hide");
+
+  // появление печеньки
+  cookie.classList.add("show");
 
   setTimeout(()=>{
     if(!audioCtx) setupAudio();
@@ -313,6 +328,12 @@ playButton.addEventListener("click", ()=>{
       setInterval(spawnPhoto, 1500);
       playButton.style.display = "none";
     });
+
+    // исчезновение печеньки через 5 секунд
+    setTimeout(()=>{
+      cookie.classList.add("hide");
+    }, 5000);
+
   }, 1000);
 });
 </script>
