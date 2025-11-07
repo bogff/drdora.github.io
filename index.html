@@ -9,47 +9,55 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
   font-family: 'Poppins', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(135deg, #1a0f2c, #2c1f4d);
+  background: linear-gradient(135deg,#1a0f2c,#2c1f4d);
+  position: relative;
   color: white;
   overflow: hidden;
-  position: relative;
 }
 
+/* Заголовок */
 h1 {
   font-size: clamp(1.8em, 4vw, 3em);
   text-align: center;
   color: #cda4ff;
   text-shadow: 0 0 10px #b080ff, 0 0 30px #a060ff;
   opacity: 0;
-  animation: fadeIn 3s forwards;
-  margin-top: 10vh;
+  animation: fadeIn 2.4s forwards;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 20;
 }
+
 @keyframes fadeIn { to { opacity: 1; } }
 
-/* Флаг */
+/* === ФЛАГ === */
 .flag {
   position: absolute;
-  top: 20%;
+  top: 22%;
   right: 10%;
-  width: clamp(140px, 25vw, 220px);
+  width: 220px;
   opacity: 1;
   filter: drop-shadow(0 0 15px rgba(120,90,220,0.7))
           drop-shadow(0 0 30px rgba(180,155,250,0.4));
   transform-origin: left center;
   animation: flagAppear 1.5s ease forwards 1s, flagWave 5s ease-in-out infinite 2.5s;
-  transition: opacity 1s ease, transform 1s ease;
+  transition: opacity 1s ease, transform 1s ease !important;
 }
 
 @keyframes flagAppear {
   from { transform: translateY(-30px) scale(0.9); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
+
 @keyframes flagWave {
   0% { transform: rotateZ(-2deg) skewY(0deg); }
   25% { transform: rotateZ(2deg) skewY(2deg); }
@@ -58,24 +66,31 @@ h1 {
   100% { transform: rotateZ(-2deg) skewY(0deg); }
 }
 
-/* Печенька */
+.flag.hide {
+  opacity: 0;
+  transform: translateY(-80px) rotate(-10deg) scale(0.8);
+  pointer-events: none;
+}
+
+/* === ПЕЧЕНЬКА === */
 .cookie {
   position: absolute;
   bottom: 18%;
   left: 10%;
-  width: clamp(80px, 18vw, 120px);
+  width: 120px;
   opacity: 1;
   transform: scale(1);
   filter: drop-shadow(0 0 15px rgba(180,155,250,0.6))
           drop-shadow(0 0 30px rgba(120,90,220,0.3));
   animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
-  transition: opacity 1s ease, transform 1s ease;
+  transition: opacity 1s ease, transform 1s ease !important;
 }
 
 @keyframes cookieAppear {
   from { transform: translateY(30px) scale(0.8); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
+
 @keyframes cookieFloat {
   0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
   25% { transform: translateY(-10px) rotate(-6deg) scale(1.05); }
@@ -83,19 +98,16 @@ h1 {
   75% { transform: translateY(8px) rotate(-4deg) scale(1.03); }
 }
 
-/* Эффект исчезновения */
-.flag.hide,
 .cookie.hide {
   opacity: 0;
-  transform: translateY(-80px) rotate(-10deg) scale(0.8);
+  transform: translateY(80px) rotate(10deg) scale(0.8);
   pointer-events: none;
-  transition: all 1s ease-in-out;
 }
 
-/* Кнопка */
+/* Кнопка запуска музыки */
 #playButton {
-  padding: 14px 35px;
-  font-size: clamp(1em, 3vw, 1.3em);
+  padding: 15px 40px;
+  font-size: 1.3em;
   border: none;
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.05);
@@ -104,29 +116,34 @@ h1 {
   cursor: pointer;
   box-shadow: 0 0 20px rgba(120,90,220,0.6);
   transition: 0.3s;
-  position: relative;
-  margin-top: 25vh;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15;
 }
+
 #playButton:hover {
-  transform: scale(1.1);
+  transform: translateY(-50%) scale(1.1);
   box-shadow: 0 0 40px rgba(180,155,250,0.9);
 }
 
-/* Эквалайзер */
+/* Canvas эквалайзера */
 #equalizer {
   position: absolute;
   bottom: 60px;
   width: 90%;
   max-width: 900px;
-  height: clamp(80px, 12vh, 120px);
+  height: 120px;
   border-radius: 25px;
   backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
   background: rgba(30, 20, 50, 0.15);
   box-shadow:
     0 0 30px rgba(180,155,250,0.6),
     inset 0 0 25px rgba(120,90,220,0.3);
   overflow: hidden;
 }
+
 #equalizerCanvas {
   width: 100%;
   height: 100%;
@@ -135,8 +152,8 @@ h1 {
 /* Фото */
 .photo {
   position: absolute;
-  width: clamp(80px, 12vw, 120px);
-  height: clamp(80px, 12vw, 120px);
+  width: 120px;
+  height: 120px;
   border-radius: 20px;
   object-fit: cover;
   pointer-events: none;
@@ -157,6 +174,7 @@ h1 {
   animation: fall linear infinite;
   opacity: 0.6;
 }
+
 @keyframes fall {
   to { transform: translateY(110vh) rotate(360deg); }
 }
@@ -164,9 +182,9 @@ h1 {
 /* Footer */
 footer {
   position: absolute;
-  bottom: 15px;
+  bottom: 20px;
   text-align: center;
-  font-size: clamp(10px, 2.5vw, 14px);
+  font-size: 14px;
   color: #b080ff;
 }
 footer a {
@@ -175,23 +193,32 @@ footer a {
   margin: 0 6px;
 }
 
-/* Адаптация */
-@media (max-width: 600px) {
-  .flag { right: 5%; top: 15%; }
-  .cookie { left: 5%; bottom: 10%; }
-  #equalizer { bottom: 40px; }
+/* --- АДАПТАЦИЯ ДЛЯ ВСЕХ УСТРОЙСТВ --- */
+@media (max-width: 768px) {
+  h1 { font-size: 2em; top: 20px; }
+  .flag { width: 160px; top: 26%; right: 5%; }
+  .cookie { width: 90px; bottom: 15%; left: 6%; }
+  #equalizer { height: 90px; }
+  #playButton { font-size: 1.1em; padding: 12px 30px; }
 }
-@media (orientation: landscape) and (max-height: 500px) {
-  h1 { margin-top: 5vh; font-size: 2em; }
-  #playButton { margin-top: 10vh; }
-  #equalizer { bottom: 20px; height: 80px; }
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.6em; top: 20px; }
+  .flag { width: 130px; right: 5%; }
+  .cookie { width: 80px; left: 5%; }
+  #equalizer { height: 80px; bottom: 40px; }
+  #playButton { font-size: 1em; padding: 10px 25px; }
 }
 </style>
 </head>
 <body>
 
 <h1>С Днём Рождения, Даша 🎂💫</h1>
+
+<!-- Флаг -->
 <img src="images/flag.png" alt="флаг" class="flag" id="flag">
+
+<!-- Печенька -->
 <img src="images/cookie.png" alt="печенька" class="cookie" id="cookie">
 
 <button id="playButton">Нажми 🎵</button>
@@ -335,21 +362,20 @@ function createSnowflake(){
 }
 setInterval(createSnowflake, 300);
 
-playButton.addEventListener("click", async ()=>{
-  try {
-    if(!audioCtx) setupAudio();
-    await bgm.play();
-    drawModernWave();
-    setInterval(spawnPhoto, 1300);
-
-    // теперь анимация исчезновения
+playButton.addEventListener("click", ()=>{
     flag.classList.add("hide");
     cookie.classList.add("hide");
-    playButton.style.display = "none";
-  } catch (e) {
-    alert("⚠️ Разреши воспроизведение звука — нажми кнопку ещё раз");
-  }
+
+    setTimeout(()=>{
+        if(!audioCtx) setupAudio();
+        bgm.play().then(()=>{
+            drawModernWave();
+            setInterval(spawnPhoto, 1300);
+            playButton.style.display = "none";
+        }).catch(err=>console.log(err));
+    }, 500);
 });
 </script>
+
 </body>
 </html>
