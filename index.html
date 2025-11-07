@@ -46,7 +46,7 @@ h1 {
           drop-shadow(0 0 30px rgba(180,155,250,0.4));
   transform-origin: left center;
   animation: flagAppear 1.5s ease forwards 1s, flagWave 5s ease-in-out infinite 2.5s;
-  transition: opacity 1s ease, transform 1s ease;
+  transition: opacity 1s ease, transform 1s ease !important;
 }
 
 @keyframes flagAppear {
@@ -63,8 +63,8 @@ h1 {
 }
 
 .flag.hide {
-  opacity: 0 !important;
-  transform: translateY(-80px) rotate(-10deg) scale(0.8) !important;
+  opacity: 0;
+  transform: translateY(-80px) rotate(-10deg) scale(0.8);
   pointer-events: none;
 }
 
@@ -79,7 +79,7 @@ h1 {
   filter: drop-shadow(0 0 15px rgba(180,155,250,0.6))
           drop-shadow(0 0 30px rgba(120,90,220,0.3));
   animation: cookieAppear 2s ease forwards 2.5s, cookieFloat 6s ease-in-out infinite 4.5s;
-  transition: opacity 1s ease, transform 1s ease;
+  transition: opacity 1s ease, transform 1s ease !important;
 }
 
 @keyframes cookieAppear {
@@ -92,11 +92,6 @@ h1 {
   25% { transform: translateY(-10px) rotate(-6deg) scale(1.05); }
   50% { transform: translateY(0) rotate(4deg) scale(1); }
   75% { transform: translateY(8px) rotate(-4deg) scale(1.03); }
-}
-
-.cookie.hide {
-  opacity: 0 !important;
-  transform: translateY(80px) scale(0.5) !important;
 }
 
 /* Кнопка запуска музыки */
@@ -185,15 +180,6 @@ footer a {
   color: #cda4ff;
   text-decoration: none;
   margin: 0 6px;
-}
-
-/* Адаптив */
-@media (max-width: 768px) {
-  h1 { font-size: 2em; top: 8%; }
-  .flag { width: 150px; top: 20%; right: 5%; }
-  .cookie { width: 80px; bottom: 15%; left: 5%; }
-  #equalizer { height: 80px; bottom: 40px; }
-  #playButton { font-size: 1.1em; padding: 12px 30px; }
 }
 </style>
 </head>
@@ -353,24 +339,27 @@ setInterval(createSnowflake, 300);
 
 // --- Кнопка запуска ---
 playButton.addEventListener("click", ()=>{
-  // Отключаем текущие CSS-анимации, чтобы hide сработал
-  flag.style.animation = "none";
-  cookie.style.animation = "none";
-  void flag.offsetHeight;
-  void cookie.offsetHeight;
+    // Останавливаем анимации флага и печеньки
+    flag.style.animation = "none";
+    cookie.style.animation = "none";
 
-  // Плавно скрываем
-  flag.classList.add("hide");
-  cookie.classList.add("hide");
+    // Форсируем перерасчет стилей
+    void flag.offsetHeight;
+    void cookie.offsetHeight;
 
-  setTimeout(()=>{
-    if(!audioCtx) setupAudio();
-    bgm.play().then(()=>{
-      drawModernWave();
-      setInterval(spawnPhoto, 1300);
-      playButton.style.display = "none";
-    });
-  }, 500);
+    // Добавляем класс hide
+    flag.classList.add("hide");
+    cookie.classList.add("hide");
+
+    // Запуск музыки и эквалайзера
+    setTimeout(()=>{
+        if(!audioCtx) setupAudio();
+        bgm.play().then(()=>{
+            drawModernWave();
+            setInterval(spawnPhoto, 1300);
+            playButton.style.display = "none";
+        });
+    }, 500);
 });
 </script>
 
