@@ -41,13 +41,14 @@ h1 {
   top: 22%;
   right: 10%;
   width: 220px;
+  opacity: 0;
+  animation: flagAppear 2s ease forwards 2s, flagWave 5s ease-in-out infinite 4s;
   filter: drop-shadow(0 0 15px rgba(255,102,204,0.7))
           drop-shadow(0 0 30px rgba(255,182,193,0.4));
-  opacity: 0;
-  animation: flagAppear 2s ease forwards 2s, flagFloat 6s ease-in-out infinite 4s;
+  transform-origin: left center;
 }
 
-/* появление */
+/* плавное появление */
 @keyframes flagAppear {
   from {
     transform: translateY(-30px) scale(0.9);
@@ -59,10 +60,46 @@ h1 {
   }
 }
 
-/* лёгкое покачивание */
-@keyframes flagFloat {
-  0%,100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-10px) rotate(2deg); }
+/* "развевание" флага */
+@keyframes flagWave {
+  0% { transform: rotateZ(-2deg) skewY(0deg); }
+  25% { transform: rotateZ(2deg) skewY(2deg); }
+  50% { transform: rotateZ(-1deg) skewY(-2deg); }
+  75% { transform: rotateZ(1deg) skewY(1deg); }
+  100% { transform: rotateZ(-2deg) skewY(0deg); }
+}
+
+/* === ПЕЧЕНЬКА === */
+.cookie {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  width: 120px;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: cookieAppear 2s ease forwards 3s, cookieFloat 6s ease-in-out infinite 5s;
+  filter: drop-shadow(0 0 15px rgba(255,182,193,0.6))
+          drop-shadow(0 0 30px rgba(255,102,204,0.3));
+}
+
+/* появление */
+@keyframes cookieAppear {
+  from {
+    transform: translateY(30px) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* плавное "парение" и вращение */
+@keyframes cookieFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-10px) rotate(-8deg) scale(1.05); }
+  50% { transform: translateY(0) rotate(6deg) scale(1); }
+  75% { transform: translateY(10px) rotate(-4deg) scale(1.03); }
 }
 
 /* Кнопка запуска музыки */
@@ -144,7 +181,10 @@ footer a {
 <h1>С Днём Рождения, Даша 🎂💫</h1>
 
 <!-- Флаг -->
-<img src="images/flag.png" alt="флаг Даши" class="flag" />
+<img src="images/flag.png" alt="флаг" class="flag" />
+
+<!-- Печенька -->
+<img src="images/cookie.png" alt="печенька" class="cookie" />
 
 <button id="playButton">Нажми 🎵</button>
 <audio id="bgm" loop>
@@ -170,7 +210,7 @@ const photos = [
   "images/dasha5.jpg",
 ];
 
-// --- Canvas эквалайзера ---
+// --- Canvas эквалайзер ---
 const equalizerDiv = document.getElementById("equalizer");
 const canvas = document.getElementById("equalizerCanvas");
 const ctx = canvas.getContext("2d");
