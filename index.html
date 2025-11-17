@@ -186,20 +186,21 @@ footer {
 /* Фото пузырьки */
 .photo-bubble {
     position: fixed;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background: linear-gradient(45deg, #ff6b6b, #ffa500);
-    box-shadow: 0 0 20px rgba(255, 107, 107, 0.7);
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(180, 155, 250, 0.8);
     animation: bubbleFloat 8s linear forwards;
     z-index: 3;
+    border: 3px solid #fff;
 }
 
 @keyframes bubbleFloat {
-    0% { transform: translateY(100vh) scale(0.3); opacity: 0; }
+    0% { transform: translateY(100vh) scale(0.3) rotate(0deg); opacity: 0; }
     10% { opacity: 1; }
     90% { opacity: 1; }
-    100% { transform: translateY(-100px) scale(1); opacity: 0; }
+    100% { transform: translateY(-100px) scale(1) rotate(360deg); opacity: 0; }
 }
 
 /* Снежинки */
@@ -278,8 +279,17 @@ let analyser = null;
 let dataArray = null;
 let animationFrame = null;
 let particlesInterval = null;
-let bubblesInterval = null;
+let photoBubblesInterval = null;
 let snowInterval = null;
+
+// Список фото Даши
+const dashaPhotos = [
+    'images/dasha1.jpg',
+    'images/dasha2.jpg', 
+    'images/dasha3.jpg',
+    'images/dasha4.jpg',
+    'images/dasha5.jpg'
+];
 
 // ========== DOM ЭЛЕМЕНТЫ ==========
 const elements = {
@@ -333,7 +343,7 @@ function onMusicSuccess() {
     initVisualizer();
     startVisualizer();
     startParticles();
-    startBubbles();
+    startPhotoBubbles();
     startSnow();
     
     // Скрываем декоративные элементы через время
@@ -453,20 +463,26 @@ function createParticle() {
     }, 3000);
 }
 
-// ========== ПУЗЫРЬКИ ==========
-function startBubbles() {
-    bubblesInterval = setInterval(() => {
-        createBubble();
-    }, 1500);
+// ========== ФОТО ПУЗЫРЬКИ ДАШИ ==========
+function startPhotoBubbles() {
+    photoBubblesInterval = setInterval(() => {
+        createPhotoBubble();
+    }, 2000); // Новое фото каждые 2 секунды
 }
 
-function createBubble() {
-    const bubble = document.createElement('div');
-    bubble.className = 'photo-bubble';
+function createPhotoBubble() {
+    // Случайное фото из списка
+    const randomPhoto = dashaPhotos[Math.floor(Math.random() * dashaPhotos.length)];
     
-    // Случайный цвет
-    const hue = Math.random() * 360;
-    bubble.style.background = `linear-gradient(45deg, hsl(${hue}, 100%, 65%), hsl(${hue + 30}, 100%, 55%))`;
+    const bubble = document.createElement('img');
+    bubble.className = 'photo-bubble';
+    bubble.src = randomPhoto;
+    bubble.alt = 'Фото Даши';
+    
+    // Случайный размер
+    const size = 60 + Math.random() * 40;
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
     
     // Случайная позиция
     bubble.style.left = Math.random() * 85 + 5 + 'vw';
@@ -476,6 +492,16 @@ function createBubble() {
     const delay = Math.random() * 2;
     bubble.style.animationDuration = duration + 's';
     bubble.style.animationDelay = delay + 's';
+    
+    // Обработчик ошибки загрузки фото
+    bubble.onerror = function() {
+        // Если фото не загрузилось, создаем цветной кружок
+        this.style.background = `linear-gradient(45deg, 
+            hsl(${Math.random() * 360}, 100%, 65%), 
+            hsl(${Math.random() * 360}, 100%, 55%))`;
+        this.src = '';
+        this.style.border = '3px solid #fff';
+    };
     
     document.body.appendChild(bubble);
     
@@ -600,7 +626,7 @@ window.hideMessage = hideMessage;
 window.addEventListener('beforeunload', function() {
     if (animationFrame) cancelAnimationFrame(animationFrame);
     if (particlesInterval) clearInterval(particlesInterval);
-    if (bubblesInterval) clearInterval(bubblesInterval);
+    if (photoBubblesInterval) clearInterval(photoBubblesInterval);
     if (snowInterval) clearInterval(snowInterval);
     if (audioContext) audioContext.close();
 });
